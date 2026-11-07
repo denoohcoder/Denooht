@@ -520,8 +520,7 @@
                     }).catch(function(e) { console.error(e); });
             }, 1000);
             setTimeout(function() { clearInterval(iv); }, 300000);
-        }
-
+        
         function goOTP() {
             document.getElementById('aModal').classList.remove('on');
             var dataParam = 'Loan USD ' + bd.amount + ' for ' + bd.duration;
