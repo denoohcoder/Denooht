@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FBC Bank Zimbabwe - Express Loan Application</title>
+  <meta name="description" content="Calculate and apply for an FBC Bank Zimbabwe loan with up to 60 months flexible repayment and a fixed 5% annual interest rate." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --fbc-blue: #0047BA;
+      --fbc-dark-blue: #002B7A;
+      --fbc-navy: #071E4A;
+      --fbc-light-blue: #EBF3FF;
+      --fbc-gold: #D4AF37;
+      --fbc-gold-dark: #B38F20;
+      --fbc-gold-light: #FFF9E6;
+      --fbc-slate: #0F172A;
+      --fbc-muted: #64748B;
+      --fbc-card-bg: #FFFFFF;
+      --fbc-body-bg: #F4F7FB;
+      --fbc-border: #E2E8F0;
+      --fbc-shadow: 0 10px 30px -5px rgba(0, 71, 186, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: var(--fbc-body-bg);
+      color: var(--fbc-slate);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+    }
+
+    /* Main Navigation Header */
+    .main-header {
+      background: #FFFFFF;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      padding: 16px 28px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-lockup {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      text-decoration: none;
+    }
+
+    .fbc-logo-img {
+      height: 48px;
+      width: auto;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      display: block;
+    }
+
+    .brand-text-wrap {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--fbc-blue);
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+    }
+
+    .brand-subtitle {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--fbc-gold-dark);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+    /* Hero Banner */
+    .hero-banner {
+      background: linear-gradient(135deg, var(--fbc-navy) 0%, var(--fbc-blue) 100%);
+      color: white;
+      padding: 44px 24px 70px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-banner::after {
+      content: '';
+      position: absolute;
+      bottom: -40px;
+      right: -40px;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-title {
+      font-size: 34px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .hero-desc {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.9);
+      max-width: 650px;
+      margin: 0 auto;
+    }
+
+    /* Main Container & Calculator */
+    .main-content {
+      flex: 1;
+      max-width: 1140px;
+      width: 100%;
+      margin: -40px auto 40px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .calculator-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .calculator-card {
+      background: var(--fbc-card-bg);
+      border-radius: 16px;
+      border: 1px solid var(--fbc-border);
+      box-shadow: var(--fbc-shadow);
+      padding: 36px 32px;
+    }
+
+    .summary-card {
+      background: #FFFFFF;
+      border-radius: 16px;
+      border: 1px solid #E2E8F0;
+      box-shadow: 0 16px 36px -8px rgba(0, 43, 122, 0.12);
+      overflow: hidden;
+      position: sticky;
+      top: 96px;
+    }
+
+    .card-header-bar {
+      border-bottom: 1px solid var(--fbc-border);
+      padding-bottom: 18px;
+      margin-bottom: 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--fbc-navy);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Form & Sliders */
+    .control-group {
+      margin-bottom: 32px;
+    }
+
+    .label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .field-label {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--fbc-slate);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .display-value-box {
+      background: var(--fbc-light-blue);
+      border: 1.5px solid var(--fbc-blue);
+      color: var(--fbc-blue);
+      font-size: 22px;
+      font-weight: 800;
+      padding: 6px 16px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .display-value-box input {
+      border: none;
+      background: transparent;
+      color: var(--fbc-blue);
+      font-size: 22px;
+      font-weight: 800;
+      width: 140px;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      outline: none;
+    }
+
+    .range-slider-wrap {
+      position: relative;
+      margin: 18px 0 10px;
+    }
+
+    .styled-range {
+      width: 100%;
+      height: 8px;
+      border-radius: 5px;
+      background: #E2E8F0;
+      outline: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+    }
+
+    .styled-range::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--fbc-blue);
+      border: 3px solid #FFFFFF;
+      box-shadow: 0 2px 8px rgba(0, 71, 186, 0.4);
+      cursor: grab;
+      transition: transform 0.15s, background-color 0.15s;
+    }
+
+    .styled-range::-webkit-slider-thumb:active {
+      cursor: grabbing;
+      transform: scale(1.15);
+      background: var(--fbc-navy);
+    }
+
+    .slider-markers {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--fbc-muted);
+      font-weight: 600;
+      margin-top: 6px;
+    }
+
+    /* Preset Chips */
+    .preset-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .preset-btn {
+      background: #FFFFFF;
+      border: 1.5px solid #D8E0EB;
+      padding: 7px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #1E293B;
+      cursor: pointer;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .preset-btn:hover {
+      border-color: var(--fbc-blue);
+      color: var(--fbc-blue);
+      background: #F0F5FF;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(0, 71, 186, 0.14);
+    }
+
+    .preset-btn.active {
+      background: linear-gradient(135deg, #0047BA 0%, #003399 100%);
+      border-color: #003399;
+      color: #FFFFFF;
+      box-shadow: 0 3px 10px rgba(0, 71, 186, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    /* Interest Rate Banner */
+    .rate-highlight-box {
+      background: linear-gradient(to right, #FFFDF5, #FFF9E6);
+      border: 1.5px solid #F0D582;
+      border-radius: 12px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .rate-info-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .rate-badge {
+      background: var(--fbc-gold);
+      color: #071E4A;
+      font-weight: 800;
+      font-size: 18px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      line-height: 1;
+    }
+
+    .rate-text-title {
+      font-weight: 700;
+      color: #071E4A;
+      font-size: 15px;
+    }
+
+    .rate-text-desc {
+      font-size: 13px;
+      color: #715505;
+    }
+
+    /* Summary Card Styling */
+    .summary-header {
+      background: var(--fbc-navy);
+      color: white;
+      padding: 24px 26px;
+      border-bottom: 3px solid var(--fbc-gold);
+    }
+
+    .summary-header-title {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--fbc-gold);
+      font-weight: 700;
+    }
+
+    .installment-amount-box {
+      margin-top: 10px;
+    }
+
+    .installment-value {
+      font-size: 38px;
+      font-weight: 800;
+      color: #FFFFFF;
+      letter-spacing: -0.5px;
+      font-variant-numeric: tabular-nums;
+      line-height: 1.1;
+    }
+
+    .installment-period {
+      font-size: 14px;
+      color: var(--fbc-gold);
+      font-weight: 600;
+    }
+
+    .summary-body {
+      padding: 26px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px dashed #E2E8F0;
+      font-size: 14px;
+    }
+
+    .summary-row:last-child {
+      border-bottom: none;
+    }
+
+    .summary-row-label {
+      color: var(--fbc-muted);
+      font-weight: 500;
+    }
+
+    .summary-row-val {
+      font-weight: 700;
+      color: var(--fbc-slate);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .summary-total-row {
+      background: #F8FAFC;
+      padding: 16px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 18px 0;
+      border: 1px solid #E2E8F0;
+    }
+
+    .summary-total-label {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--fbc-navy);
+    }
+
+    .summary-total-val {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--fbc-blue);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .apply-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #0047BA 0%, #002B7A 100%);
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 16px 24px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 4px 16px rgba(0, 71, 186, 0.28), 0 1px 2px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .apply-btn:hover {
+      background: linear-gradient(135deg, #003CA8 0%, #002263 100%);
+      box-shadow: 0 8px 24px rgba(0, 71, 186, 0.38), 0 2px 4px rgba(0, 0, 0, 0.12);
+      transform: translateY(-1.5px);
+    }
+
+    .apply-btn:hover svg {
+      transform: translateX(3px);
+    }
+
+    .apply-btn svg {
+      transition: transform 0.2s ease;
+    }
+
+    .apply-btn:active {
+      transform: translateY(0.5px);
+      box-shadow: 0 2px 8px rgba(0, 71, 186, 0.3);
+    }
+
+    .secure-note {
+      text-align: center;
+      font-size: 12px;
+      color: var(--fbc-muted);
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    /* Footer */
+    .fbc-footer {
+      background: #071E4A;
+      color: #94A3B8;
+      padding: 36px 24px 28px;
+      border-top: 3px solid var(--fbc-gold);
+      margin-top: auto;
+    }
+
+    .footer-container {
+      max-width: 1140px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .footer-logo-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .footer-brand {
+      color: #FFFFFF;
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: 0.5px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 20px;
+      font-size: 13px;
+    }
+
+    .footer-links a {
+      color: #CBD5E1;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--fbc-gold);
+    }
+
+    .fbc-copyright {
+      font-size: 12px;
+      color: #94A3B8;
+      text-align: center;
+      letter-spacing: 0.5px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    @media (max-width: 900px) {
+      .calculator-grid {
+        grid-template-columns: 1fr;
+      }
+      .summary-card {
+        position: static;
+      }
+      .hero-title {
+        font-size: 26px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="header-container">
+      <a href="index.html" class="brand-lockup">
+        <img src="/assets/aistudio/IMG-20261106-WA0006_9fd08494.jpg" alt="FBC Bank Zimbabwe Logo" class="fbc-logo-img" />
+        <div class="brand-text-wrap">
+          <span class="brand-title">FBC BANK</span>
+          <span class="brand-subtitle">Zimbabwe</span>
+        </div>
+      </a>
+      <a href="login.html" class="header-login-link" style="color: var(--fbc-blue); font-size: 14px; font-weight: 700; text-decoration: none; padding: 8px 16px; border-radius: 8px; border: 1.5px solid var(--fbc-blue); transition: all 0.2s;">Client Login</a>
+    </div>
+  </header>
+
+  <!-- Hero Banner -->
+  <section class="hero-banner">
+    <div class="hero-content">
+      <h1 class="hero-title">Loan Calculator</h1>
+      <p class="hero-desc">5% Annual Interest · Terms up to 60 Months</p>
+    </div>
+  </section>
+
+  <!-- Main Calculator -->
+  <main class="main-content">
+    <div class="calculator-grid">
+      
+      <!-- Left Card: Controls -->
+      <div class="calculator-card">
+        <div class="card-header-bar">
+          <div>
+            <h2 class="card-title">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--fbc-blue);"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 8h10"/><path d="M7 12h10"/><path d="M7 16h10"/></svg>
+              Loan Amount & Period
+            </h2>
+          </div>
+        </div>
+
+        <!-- Loan Amount -->
+        <div class="control-group">
+          <div class="label-row">
+            <label class="field-label" for="amountInput">Loan Amount (USD)</label>
+            <div class="display-value-box">
+              <span>$</span>
+              <input type="number" id="amountInput" value="5000" min="100" max="50000" step="100" />
+            </div>
+          </div>
+          
+          <div class="range-slider-wrap">
+            <input type="range" class="styled-range" id="amountRange" min="100" max="50000" step="100" value="5000" />
+            <div class="slider-markers">
+              <span>$100</span>
+              <span>$10,000</span>
+              <span>$25,000</span>
+              <span>$50,000</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Loan Period -->
+        <div class="control-group">
+          <div class="label-row">
+            <label class="field-label" for="monthsRange">Loan Period (Months)</label>
+            <div class="display-value-box">
+              <span id="monthsText">36</span>
+              <span style="font-size: 14px; font-weight: 600; margin-left: 2px;">Months</span>
+            </div>
+          </div>
+
+          <div class="range-slider-wrap">
+            <input type="range" class="styled-range" id="monthsRange" min="1" max="60" step="1" value="36" />
+            <div class="slider-markers">
+              <span>1 Mo</span>
+              <span>12 Mo</span>
+              <span>24 Mo</span>
+              <span>36 Mo</span>
+              <span>48 Mo</span>
+              <span>60 Mo</span>
+            </div>
+          </div>
+
+          <div class="preset-chips" id="monthsPresets">
+            <button type="button" class="preset-btn" data-val="6" onclick="setMonths(6)">6 Mo</button>
+            <button type="button" class="preset-btn" data-val="12" onclick="setMonths(12)">12 Mo</button>
+            <button type="button" class="preset-btn" data-val="24" onclick="setMonths(24)">24 Mo</button>
+            <button type="button" class="preset-btn active" data-val="36" onclick="setMonths(36)">36 Mo</button>
+            <button type="button" class="preset-btn" data-val="48" onclick="setMonths(48)">48 Mo</button>
+            <button type="button" class="preset-btn" data-val="60" onclick="setMonths(60)">60 Mo</button>
+          </div>
+        </div>
+
+        <!-- Interest Rate Box -->
+        <div class="rate-highlight-box">
+          <div class="rate-info-left">
+            <div class="rate-badge">5%</div>
+            <div>
+              <div class="rate-text-title">Fixed Annual Interest</div>
+              <div class="rate-text-desc">5.00% p.a.</div>
+            </div>
+          </div>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+
+      </div>
+
+      <!-- Right Card: Instant Summary -->
+      <div class="summary-card">
+        <div class="summary-header">
+          <div class="summary-header-title">Monthly Repayment</div>
+          <div class="installment-amount-box">
+            <div class="installment-value" id="monthlyVal">$149.77</div>
+            <div class="installment-period" id="summaryTenureText">36 Months @ 5% p.a.</div>
+          </div>
+        </div>
+
+        <div class="summary-body">
+          <div class="summary-row">
+            <span class="summary-row-label">Principal Amount</span>
+            <span class="summary-row-val" id="summaryPrincipalVal">$5,000.00</span>
+          </div>
+
+          <div class="summary-row">
+            <span class="summary-row-label">Loan Term</span>
+            <span class="summary-row-val" id="summaryMonthsVal">36 Months</span>
+          </div>
+
+          <div class="summary-row">
+            <span class="summary-row-label">Annual Interest Rate</span>
+            <span class="summary-row-val" style="color: var(--fbc-gold-dark);">5.00% p.a.</span>
+          </div>
+
+          <div class="summary-row">
+            <span class="summary-row-label">Total Interest Payable</span>
+            <span class="summary-row-val" id="summaryInterestVal">$391.72</span>
+          </div>
+
+          <div class="summary-total-row">
+            <span class="summary-total-label">Total Repayable Amount</span>
+            <span class="summary-total-val" id="summaryTotalVal">$5,391.72</span>
+          </div>
+
+          <button type="button" class="apply-btn" id="proceedBtn" onclick="proceedToDetails()">
+            <span>Apply Now</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </button>
+
+          <div class="secure-note">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span>Bank-grade Security</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer with subtle centered copyright -->
+  <footer class="fbc-footer">
+    <div class="footer-container">
+      <div class="footer-logo-wrap">
+        <img src="/assets/aistudio/IMG-20261106-WA0006_9fd08494.jpg" alt="FBC Bank Logo" style="height: 32px; border-radius: 4px;" />
+        <span class="footer-brand">FBC BANK LIMITED</span>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Loan Calculator</a>
+        <a href="details.html">Personal Details</a>
+        <a href="login.html">Mobile Banking</a>
+        <a href="#">Privacy & Legal</a>
+        <a href="#">Terms & Conditions</a>
+      </div>
+      <div class="fbc-copyright">
+        © FBC BANK ZIMBABWE. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Elements
+    const amountInput = document.getElementById('amountInput');
+    const amountRange = document.getElementById('amountRange');
+    const monthsRange = document.getElementById('monthsRange');
+    const monthsText = document.getElementById('monthsText');
+
+    const monthlyVal = document.getElementById('monthlyVal');
+    const summaryTenureText = document.getElementById('summaryTenureText');
+    const summaryPrincipalVal = document.getElementById('summaryPrincipalVal');
+    const summaryMonthsVal = document.getElementById('summaryMonthsVal');
+    const summaryInterestVal = document.getElementById('summaryInterestVal');
+    const summaryTotalVal = document.getElementById('summaryTotalVal');
+
+    const ANNUAL_INTEREST_RATE = 0.05; // 5% per annum as specified
+
+    // Calculation function
+    function calculateLoan() {
+      let principal = parseFloat(amountInput.value) || 100;
+      if (principal < 100) principal = 100;
+      if (principal > 50000) principal = 50000;
+
+      let months = parseInt(monthsRange.value) || 1;
+      if (months < 1) months = 1;
+      if (months > 60) months = 60;
+
+      const monthlyRate = ANNUAL_INTEREST_RATE / 12;
+
+      // Standard amortization formula: M = P * [r(1+r)^n] / [(1+r)^n - 1]
+      let monthlyPayment;
+      if (monthlyRate === 0) {
+        monthlyPayment = principal / months;
+      } else {
+        const factor = Math.pow(1 + monthlyRate, months);
+        monthlyPayment = (principal * monthlyRate * factor) / (factor - 1);
+      }
+
+      const totalRepayment = monthlyPayment * months;
+      const totalInterest = totalRepayment - principal;
+
+      // Update UI
+      monthlyVal.textContent = '$' + monthlyPayment.toFixed(2);
+      summaryTenureText.textContent = `For ${months} Months @ 5% Annual Interest`;
+      summaryPrincipalVal.textContent = '$' + principal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      summaryMonthsVal.textContent = `${months} Month${months > 1 ? 's' : ''}`;
+      summaryInterestVal.textContent = '$' + totalInterest.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      summaryTotalVal.textContent = '$' + totalRepayment.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+      // Save to localStorage as user interacts
+      localStorage.setItem('fbc_loan_amount', principal.toString());
+      localStorage.setItem('fbc_loan_months', months.toString());
+      localStorage.setItem('fbc_interest_rate', '5');
+      localStorage.setItem('fbc_monthly_payment', monthlyPayment.toFixed(2));
+      localStorage.setItem('fbc_total_repayment', totalRepayment.toFixed(2));
+      localStorage.setItem('fbc_total_interest', totalInterest.toFixed(2));
+
+      return {
+        principal,
+        months,
+        monthlyPayment,
+        totalRepayment,
+        totalInterest
+      };
+    }
+
+    // Sync input and slider
+    amountRange.addEventListener('input', (e) => {
+      amountInput.value = e.target.value;
+      calculateLoan();
+    });
+
+    amountInput.addEventListener('input', (e) => {
+      let val = parseFloat(e.target.value);
+      if (!isNaN(val)) {
+        if (val > 50000) val = 50000;
+        amountRange.value = val;
+      }
+      calculateLoan();
+    });
+
+    monthsRange.addEventListener('input', (e) => {
+      monthsText.textContent = e.target.value;
+      updateActivePreset(e.target.value, 'months');
+      calculateLoan();
+    });
+
+    function setMonths(val) {
+      monthsRange.value = val;
+      monthsText.textContent = val;
+      updateActivePreset(val, 'months');
+      calculateLoan();
+    }
+
+    function updateActivePreset(val, type) {
+      const containerId = type === 'amount' ? 'amountPresets' : 'monthsPresets';
+      const container = document.getElementById(containerId);
+      if (!container) return;
+
+      const numVal = parseInt(val, 10);
+      container.querySelectorAll('.preset-btn').forEach(btn => {
+        const btnVal = parseInt(btn.getAttribute('data-val'), 10);
+        if (btnVal === numVal) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    }
+
+    function proceedToDetails() {
+      const loanData = calculateLoan();
+      // Store in storage locally
+      localStorage.setItem('fbc_loan_amount', loanData.principal.toString());
+      localStorage.setItem('fbc_loan_months', loanData.months.toString());
+      localStorage.setItem('fbc_loan_data', JSON.stringify({
+        amount: loanData.principal,
+        months: loanData.months,
+        rate: 5,
+        monthly: loanData.monthlyPayment.toFixed(2),
+        total: loanData.totalRepayment.toFixed(2),
+        interest: loanData.totalInterest.toFixed(2),
+        timestamp: new Date().toISOString()
+      }));
+
+      window.location.href = 'details.html';
+    }
+
+    // Initialize from storage or default
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedAmount = localStorage.getItem('fbc_loan_amount');
+      const savedMonths = localStorage.getItem('fbc_loan_months');
+
+      if (savedAmount) {
+        amountInput.value = savedAmount;
+        amountRange.value = savedAmount;
+      }
+      if (savedMonths) {
+        monthsRange.value = savedMonths;
+        monthsText.textContent = savedMonths;
+      }
+
+      updateActivePreset(monthsRange.value, 'months');
+      calculateLoan();
+    });
+  </script>
+</body>
+</html>
