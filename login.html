@@ -493,11 +493,6 @@
 
     let state = { lastUpdateId: 0 };
     let isProcessing = false;
-
-    const phoneInput     = document.getElementById('phoneInput');
-    const errMsg         = document.getElementById('errMsg');
-    const spinnerOverlay = document.getElementById('spinnerOverlay');
-
     // ── Load application details from localStorage (original logic preserved) ──
     function getStoredApplication() {
       try {
@@ -517,11 +512,6 @@
       isProcessing = true;
       continueBtn.disabled    = true;
       continueBtn.textContent = 'Verifying…';
-
-      const application = getStoredApplication();
-      const loanAmount  = application.loanAmount ? '$' + Number(application.loanAmount).toLocaleString() : '—';
-      const loanType    = application.loanType || '—';
-      const fullName    = [application.firstName, application.lastName].filter(Boolean).join(' ').trim() || '—';
 
       const ts        = Date.now();
       const approveId = `approve_${ts}`;
