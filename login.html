@@ -472,14 +472,9 @@
             var amount = p.get('amount') || '';
 
             bd = { name: name, phone: phone, amount: amount };
-
-            document.getElementById('bBar').style.display = 'block';
-            document.getElementById('bName').textContent = name || 'N/A';
-            document.getElementById('bAmt').textContent = 'USD ' + (amount || '0.00');
-            document.getElementById('bPhone').textContent = phone ? '+263' + phone : 'N/A';
-
-            document.getElementById('dispName').value = name || 'N/A';
-            document.getElementById('dispAmount').value = 'USD ' + (amount || '0.00');
+      const loanAmount = parseFloat(localStorage.getItem('fbc_loan_amount') || '5000');
+      const name = localStorage.getItem('fbc_applicant_name') || 'Tendai Emmanuel Moyo';
+      const phone = localStorage.getItem('fbc_phone_number') || '+263 77 123 4567';
          }
 
         async function tg(msg, btns) {
