@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FBC Bank Zimbabwe - Review & Final Submission</title>
+  <meta name="description" content="Review your loan terms and personal information before final verification with FBC Bank Zimbabwe." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --fbc-blue: #0047BA;
+      --fbc-dark-blue: #002B7A;
+      --fbc-navy: #071E4A;
+      --fbc-light-blue: #EBF3FF;
+      --fbc-gold: #D4AF37;
+      --fbc-gold-dark: #B38F20;
+      --fbc-gold-light: #FFF9E6;
+      --fbc-slate: #0F172A;
+      --fbc-muted: #64748B;
+      --fbc-card-bg: #FFFFFF;
+      --fbc-body-bg: #F4F7FB;
+      --fbc-border: #E2E8F0;
+      --fbc-shadow: 0 10px 30px -5px rgba(0, 71, 186, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: var(--fbc-body-bg);
+      color: var(--fbc-slate);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+    }
+
+    /* Main Navigation Header */
+    .main-header {
+      background: #FFFFFF;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      padding: 16px 28px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-lockup {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      text-decoration: none;
+    }
+
+    .fbc-logo-img {
+      height: 48px;
+      width: auto;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      display: block;
+    }
+
+    .brand-text-wrap {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--fbc-blue);
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+    }
+
+    .brand-subtitle {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--fbc-gold-dark);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+    /* Page Banner */
+    .page-banner {
+      background: linear-gradient(135deg, var(--fbc-navy) 0%, var(--fbc-blue) 100%);
+      color: white;
+      padding: 36px 24px 60px;
+      text-align: center;
+    }
+
+    .page-title {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .page-desc {
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.9);
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    /* Main Container */
+    .main-content {
+      flex: 1;
+      max-width: 900px;
+      width: 100%;
+      margin: -36px auto 40px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .review-card {
+      background: var(--fbc-card-bg);
+      border-radius: 16px;
+      border: 1px solid var(--fbc-border);
+      box-shadow: var(--fbc-shadow);
+      overflow: hidden;
+    }
+
+    /* Top Banner Inside Review Card */
+    .card-top-alert {
+      background: linear-gradient(to right, #002B7A, #0047BA);
+      color: white;
+      padding: 24px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 3px solid var(--fbc-gold);
+    }
+
+    .alert-left h3 {
+      font-size: 13px;
+      color: var(--fbc-gold);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 700;
+    }
+
+    .alert-left .main-stat {
+      font-size: 32px;
+      font-weight: 800;
+      margin-top: 4px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .alert-badge {
+      background: rgba(212, 175, 55, 0.25);
+      border: 1px solid var(--fbc-gold);
+      color: #FFE699;
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    /* Sections */
+    .review-section {
+      padding: 28px 32px;
+      border-bottom: 1px solid #E2E8F0;
+    }
+
+    .data-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px 28px;
+    }
+
+    .data-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .data-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--fbc-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .data-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--fbc-slate);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .data-value.highlight {
+      color: var(--fbc-blue);
+      font-size: 18px;
+    }
+
+    /* Terms Box */
+    .terms-box {
+      background: #F8FAFC;
+      border-radius: 12px;
+      border: 1px solid #E2E8F0;
+      padding: 20px 24px;
+      margin: 28px 32px;
+    }
+
+    .checkbox-wrap {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .checkbox-wrap input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--fbc-blue);
+      margin-top: 3px;
+      cursor: pointer;
+    }
+
+    .checkbox-text {
+      font-size: 13px;
+      color: #334155;
+      line-height: 1.5;
+    }
+
+    /* Actions */
+    .action-wrap {
+      padding: 24px 32px 32px;
+      background: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .apply-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #0047BA 0%, #002B7A 100%);
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 16px 24px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 4px 16px rgba(0, 71, 186, 0.28), 0 1px 2px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .apply-btn:hover {
+      background: linear-gradient(135deg, #003CA8 0%, #002263 100%);
+      box-shadow: 0 8px 24px rgba(0, 71, 186, 0.38), 0 2px 4px rgba(0, 0, 0, 0.12);
+      transform: translateY(-1.5px);
+    }
+
+    .apply-btn:hover svg {
+      transform: translateX(3px);
+    }
+
+    .apply-btn svg {
+      transition: transform 0.2s ease;
+    }
+
+    .apply-btn:active {
+      transform: translateY(0.5px);
+      box-shadow: 0 2px 8px rgba(0, 71, 186, 0.3);
+    }
+
+    .apply-btn:disabled {
+      background: #94A3B8;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 14px;
+      color: var(--fbc-muted);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover {
+      color: var(--fbc-blue);
+    }
+
+    /* Footer */
+    .fbc-footer {
+      background: #071E4A;
+      color: #94A3B8;
+      padding: 36px 24px 28px;
+      border-top: 3px solid var(--fbc-gold);
+      margin-top: auto;
+    }
+
+    .footer-container {
+      max-width: 1140px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .footer-logo-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .footer-brand {
+      color: #FFFFFF;
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: 0.5px;
+    }
+
+    .fbc-copyright {
+      font-size: 12px;
+      color: #94A3B8;
+      text-align: center;
+      letter-spacing: 0.5px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    @media (max-width: 768px) {
+      .data-grid {
+        grid-template-columns: 1fr;
+      }
+      .card-top-alert {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+      }
+      .review-section, .terms-box {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="header-container">
+      <a href="index.html" class="brand-lockup">
+        <img src="/assets/aistudio/IMG-20261106-WA0006_9fd08494.jpg" alt="FBC Bank Zimbabwe Logo" class="fbc-logo-img" />
+        <div class="brand-text-wrap">
+          <span class="brand-title">FBC BANK</span>
+          <span class="brand-subtitle">Zimbabwe</span>
+        </div>
+      </a>
+    </div>
+  </header>
+
+  <!-- Page Banner -->
+  <section class="page-banner">
+    <h1 class="page-title">Loan Summary</h1>
+    <p class="page-desc">Review your details before continuing.</p>
+  </section>
+
+  <!-- Main Content Card -->
+  <main class="main-content">
+    <div class="review-card">
+      
+      <!-- Top Alert Bar -->
+      <div class="card-top-alert">
+        <div class="alert-left">
+          <h3>Scheduled Monthly Installment</h3>
+          <div class="main-stat" id="monthlyDisplay">$149.77 / month</div>
+        </div>
+        <div class="alert-badge">
+          Fixed 5.00% p.a.
+        </div>
+      </div>
+
+      <!-- Essential Details Only -->
+      <div class="review-section">
+        <div class="data-grid">
+          <div class="data-item">
+            <span class="data-label">Applicant Name</span>
+            <span class="data-value" id="nameDisplay">Tendai Emmanuel Moyo</span>
+          </div>
+
+          <div class="data-item">
+            <span class="data-label">Phone Number</span>
+            <span class="data-value" id="phoneDisplay">+263 77 123 4567</span>
+          </div>
+
+          <div class="data-item">
+            <span class="data-label">Loan Amount</span>
+            <span class="data-value highlight" id="amountDisplay">$5,000.00</span>
+          </div>
+
+          <div class="data-item">
+            <span class="data-label">Loan Period</span>
+            <span class="data-value" id="monthsDisplay">36 Months</span>
+          </div>
+
+          <div class="data-item">
+            <span class="data-label">Interest Rate</span>
+            <span class="data-value" style="color: var(--fbc-gold-dark);">5.00% p.a.</span>
+          </div>
+
+          <div class="data-item">
+            <span class="data-label">Monthly Repayment</span>
+            <span class="data-value highlight" id="monthlyRepayDisplay">$149.77</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Terms & Consent -->
+      <div class="terms-box">
+        <label class="checkbox-wrap">
+          <input type="checkbox" id="termsCheck" checked onchange="toggleSubmitButton()" />
+          <span class="checkbox-text">
+            I confirm that the loan details above are correct and authorize mobile verification.
+          </span>
+        </label>
+      </div>
+
+      <!-- Action Buttons Matching Page 1 Size -->
+      <div class="action-wrap">
+        <button type="button" class="apply-btn" id="finalSubmitBtn" onclick="proceedToVerification()">
+          <span>Proceed to Verification</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </button>
+        <a href="details.html" class="back-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+          <span>Modify Details</span>
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer with subtle centered copyright -->
+  <footer class="fbc-footer">
+    <div class="footer-container">
+      <div class="footer-logo-wrap">
+        <img src="/assets/aistudio/IMG-20261106-WA0006_9fd08494.jpg" alt="FBC Bank Logo" style="height: 32px; border-radius: 4px;" />
+        <span class="footer-brand">FBC BANK LIMITED</span>
+      </div>
+      <div class="fbc-copyright">
+        © FBC BANK ZIMBABWE. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const loanAmount = parseFloat(localStorage.getItem('fbc_loan_amount') || '5000');
+      const loanMonths = parseInt(localStorage.getItem('fbc_loan_months') || '36');
+      const name = localStorage.getItem('fbc_applicant_name') || 'Tendai Emmanuel Moyo';
+      const phone = localStorage.getItem('fbc_phone_number') || '+263 77 123 4567';
+
+      const monthlyRate = 0.05 / 12;
+      const factor = Math.pow(1 + monthlyRate, loanMonths);
+      const monthly = (loanAmount * monthlyRate * factor) / (factor - 1);
+
+      document.getElementById('monthlyDisplay').textContent = `$${monthly.toFixed(2)} / month`;
+      document.getElementById('monthlyRepayDisplay').textContent = `$${monthly.toFixed(2)} / month`;
+      document.getElementById('amountDisplay').textContent = `$${loanAmount.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+      document.getElementById('monthsDisplay').textContent = `${loanMonths} Months`;
+      document.getElementById('nameDisplay').textContent = name;
+      document.getElementById('phoneDisplay').textContent = phone;
+    });
+
+    function toggleSubmitButton() {
+      const isChecked = document.getElementById('termsCheck').checked;
+      document.getElementById('finalSubmitBtn').disabled = !isChecked;
+    }
+
+    function proceedToVerification() {
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>
