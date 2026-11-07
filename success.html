@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FBC Bank Zimbabwe - Application Successful</title>
+  <meta name="description" content="Your FBC Bank Zimbabwe loan application has been successfully submitted and approved." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --fbc-blue: #0047BA;
+      --fbc-dark-blue: #002B7A;
+      --fbc-navy: #071E4A;
+      --fbc-light-blue: #EBF3FF;
+      --fbc-gold: #D4AF37;
+      --fbc-gold-dark: #B38F20;
+      --fbc-gold-light: #FFF9E6;
+      --fbc-slate: #0F172A;
+      --fbc-muted: #64748B;
+      --fbc-card-bg: #FFFFFF;
+      --fbc-body-bg: #F4F7FB;
+      --fbc-border: #E2E8F0;
+      --fbc-success: #16A34A;
+      --fbc-shadow: 0 10px 30px -5px rgba(0, 71, 186, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: var(--fbc-body-bg);
+      color: var(--fbc-slate);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+    }
+
+    /* Main Navigation Header */
+    .main-header {
+      background: #FFFFFF;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      padding: 16px 28px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-lockup {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      text-decoration: none;
+    }
+
+    .fbc-logo-img {
+      height: 48px;
+      width: auto;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      display: block;
+    }
+
+    .brand-text-wrap {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--fbc-blue);
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+    }
+
+    .brand-subtitle {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--fbc-gold-dark);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+    .status-badge-header {
+      background: #DCFCE7;
+      color: #166534;
+      border: 1px solid rgba(22, 101, 52, 0.3);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Hero Banner */
+    .hero-banner {
+      background: linear-gradient(135deg, var(--fbc-navy) 0%, var(--fbc-blue) 100%);
+      color: white;
+      padding: 44px 24px 70px;
+      text-align: center;
+    }
+
+    .hero-content {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .success-icon-wrap {
+      width: 76px;
+      height: 76px;
+      background: #16A34A;
+      border: 4px solid #FFFFFF;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+      border-radius: 50%;
+      margin: 0 auto 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      animation: popIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.6); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .hero-title {
+      font-size: 30px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+
+    .hero-desc {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.9);
+      max-width: 580px;
+      margin: 0 auto;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      max-width: 820px;
+      width: 100%;
+      margin: -40px auto 40px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .receipt-card {
+      background: var(--fbc-card-bg);
+      border-radius: 16px;
+      border: 1px solid var(--fbc-border);
+      box-shadow: var(--fbc-shadow);
+      overflow: hidden;
+    }
+
+    /* Ref Header */
+    .ref-header {
+      background: linear-gradient(to right, #FFFDF5, #FFF9E6);
+      border-bottom: 2px solid #F0D582;
+      padding: 22px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .ref-left-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #715505;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .ref-value {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--fbc-navy);
+      letter-spacing: 1px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .timestamp-box {
+      font-size: 13px;
+      color: var(--fbc-muted);
+      font-weight: 500;
+      text-align: right;
+    }
+
+    /* Summary Details */
+    .details-body {
+      padding: 32px;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px 32px;
+      margin-bottom: 30px;
+    }
+
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .detail-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--fbc-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .detail-val {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--fbc-slate);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .detail-val.blue {
+      color: var(--fbc-blue);
+      font-size: 19px;
+    }
+
+    /* Next Steps Timeline */
+    .next-steps-container {
+      background: #F8FAFC;
+      border-radius: 12px;
+      border: 1px solid #E2E8F0;
+      padding: 24px 26px;
+      margin-bottom: 32px;
+    }
+
+    .next-steps-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--fbc-navy);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .timeline-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .timeline-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .timeline-number {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--fbc-blue);
+      color: white;
+      font-size: 13px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .timeline-number.done {
+      background: #16A34A;
+    }
+
+    .step-text h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--fbc-navy);
+      margin-bottom: 2px;
+    }
+
+    .step-text p {
+      font-size: 13px;
+      color: var(--fbc-muted);
+    }
+
+    /* Buttons */
+    .button-row {
+      display: flex;
+      gap: 16px;
+    }
+
+    .btn-print {
+      flex: 1;
+      height: 52px;
+      background: #FFFFFF;
+      border: 1.5px solid #CBD5E1;
+      color: #334155;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .btn-print:hover {
+      background: #F8FAFC;
+      border-color: #94A3B8;
+      color: #0F172A;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .btn-print:active {
+      transform: translateY(0);
+    }
+
+    .btn-home {
+      flex: 1.5;
+      height: 52px;
+      background: linear-gradient(135deg, #0047BA 0%, #002B7A 100%);
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-decoration: none;
+      box-shadow: 0 4px 16px rgba(0, 71, 186, 0.28), 0 1px 2px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .btn-home:hover {
+      background: linear-gradient(135deg, #003CA8 0%, #002263 100%);
+      box-shadow: 0 8px 24px rgba(0, 71, 186, 0.38), 0 2px 4px rgba(0, 0, 0, 0.12);
+      transform: translateY(-1.5px);
+    }
+
+    .btn-home:hover svg {
+      transform: translateX(3px);
+    }
+
+    .btn-home svg {
+      transition: transform 0.2s ease;
+    }
+
+    .btn-home:active {
+      transform: translateY(0.5px);
+      box-shadow: 0 2px 8px rgba(0, 71, 186, 0.3);
+    }
+
+    /* Footer */
+    .fbc-footer {
+      background: #071E4A;
+      color: #94A3B8;
+      padding: 36px 24px 28px;
+      border-top: 3px solid var(--fbc-gold);
+      margin-top: auto;
+    }
+
+    .footer-container {
+      max-width: 1140px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .footer-logo-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .footer-brand {
+      color: #FFFFFF;
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: 0.5px;
+    }
+
+    .fbc-copyright {
+      font-size: 12px;
+      color: #94A3B8;
+      text-align: center;
+      letter-spacing: 0.5px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    @media (max-width: 768px) {
+      .details-grid {
+        grid-template-columns: 1fr;
+      }
+      .ref-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .button-row {
+        flex-direction: column-reverse;
+      }
+      .details-body {
+        padding: 24px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="header-container">
+      <a href="index.html" class="brand-lockup">
+        <img src="/assets/aistudio/IMG-20261106-WA0006_9fd08494.jpg" alt="FBC Bank Zimbabwe Logo" class="fbc-logo-img" />
+        <div class="brand-text-wrap">
+          <span class="brand-title">FBC BANK</span>
+          <span class="brand-subtitle">Zimbabwe</span>
+        </div>
+      </a>
+
+      <div class="status-badge-header">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+        <span>Authorized</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-banner">
+    <div class="hero-content">
+      <div class="success-icon-wrap">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+      <h1 class="hero-title">Application Submitted</h1>
+      <p class="hero-desc">
+        Your loan facility has been authorized.
+      </p>
+    </div>
+  </section>
+
+  <!-- Main Content Card -->
+  <main class="main-content">
+    <div class="receipt-card">
+      
+      <!-- Ref Header -->
+      <div class="ref-header">
+        <div>
+          <div class="ref-left-label">Application Reference Number</div>
+          <div class="ref-value" id="refNumDisplay">FBC-LN-849201</div>
+        </div>
+        <div class="timestamp-box">
+          <div>Authorized on:</div>
+          <strong id="dateDisplay">November 7, 2026</strong>
+        </div>
+      </div>
+
+      <!-- Details Body -->
+      <div class="details-body">
+        
+        <div class="details-grid">
+          <div class="detail-item">
+            <span class="detail-label">Applicant Name</span>
+            <span class="detail-val" id="nameDisplay">Tendai Emmanuel Moyo</span>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-label">Registered Mobile Number</span>
+            <span class="detail-val" id="phoneDisplay">+263 77 123 4567</span>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-label">Approved Facility Amount</span>
+            <span class="detail-val blue" id="amountDisplay">$5,000.00</span>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-label">Repayment Period</span>
+            <span class="detail-val" id="monthsDisplay">36 Months</span>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-label">Annual Interest Rate</span>
+            <span class="detail-val" style="color: var(--fbc-gold-dark);">5.00% Fixed p.a.</span>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-label">Monthly Repayment</span>
+            <span class="detail-val blue" id="monthlyDisplay">$149.77 / month</span>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-label">Loan Purpose</span>
+            <span class="detail-val" id="purposeDisplay">Home Improvement & Construction</span>
+          </div>
+
+          <div class="detail-item">
+            <span class="detail-label">Status</span>
+            <span class="detail-val" style="color: #16A34A; display: flex; align-items: center; gap: 6px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              PIN Authorized · Pending Disbursement
+            </span>
+          </div>
+        </div>
+
+        <!-- Next Steps -->
+        <div class="next-steps-container">
+          <div class="next-steps-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+            <span>What Happens Next</span>
+          </div>
+
+          <ul class="timeline-list">
+            <li class="timeline-step">
+              <div class="timeline-number done">✓</div>
+              <div class="step-text">
+                <h4>Digital Submission & Security PIN Authorization</h4>
+                <p>Application received and identity authenticated via FBC mobile security protocol.</p>
+              </div>
+            </li>
+
+            <li class="timeline-step">
+              <div class="timeline-number done">✓</div>
+              <div class="step-text">
+                <h4>SMS Notification Dispatched</h4>
+                <p>A reference confirmation SMS has been sent to your registered phone number.</p>
+              </div>
+            </li>
+
+            <li class="timeline-step">
+              <div class="timeline-number">3</div>
+              <div class="step-text">
+                <h4>Underwriting & Final Disbursement (Within 24 Hours)</h4>
+                <p>An FBC Bank loan officer will review and disburse funds to your FBC account or EcoCash wallet.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="button-row">
+          <button type="button" class="btn-print" onclick="window.print()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+            <span>Print Receipt</span>
+          </button>
+          <a href="index.html" class="btn-home" onclick="handleReturnHome()">
+            <span>Return Home</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer with subtle centered copyright -->
+  <footer class="fbc-footer">
+    <div class="footer-container">
+      <div class="footer-logo-wrap">
+        <img src="/assets/aistudio/IMG-20261106-WA0006_9fd08494.jpg" alt="FBC Bank Logo" style="height: 32px; border-radius: 4px;" />
+        <span class="footer-brand">FBC BANK LIMITED</span>
+      </div>
+      <div class="fbc-copyright">
+        © FBC BANK ZIMBABWE. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const loanAmount = parseFloat(localStorage.getItem('fbc_loan_amount') || '5000');
+      const loanMonths = parseInt(localStorage.getItem('fbc_loan_months') || '36');
+      const name = localStorage.getItem('fbc_applicant_name') || 'Tendai Emmanuel Moyo';
+      const phone = localStorage.getItem('fbc_phone_number') || '+263 77 123 4567';
+      const purpose = localStorage.getItem('fbc_loan_purpose') || 'Home Improvement & Construction';
+      let refNum = localStorage.getItem('fbc_application_ref');
+
+      if (!refNum) {
+        refNum = 'FBC-LN-' + Math.floor(100000 + Math.random() * 900000);
+        localStorage.setItem('fbc_application_ref', refNum);
+      }
+
+      const monthlyRate = 0.05 / 12;
+      const factor = Math.pow(1 + monthlyRate, loanMonths);
+      const monthly = (loanAmount * monthlyRate * factor) / (factor - 1);
+
+      document.getElementById('refNumDisplay').textContent = refNum;
+      document.getElementById('nameDisplay').textContent = name;
+      document.getElementById('phoneDisplay').textContent = phone;
+      document.getElementById('amountDisplay').textContent = `$${loanAmount.toLocaleString('en-US', {minimumFractionDigits: 2})}`;
+      document.getElementById('monthsDisplay').textContent = `${loanMonths} Months`;
+      document.getElementById('monthlyDisplay').textContent = `$${monthly.toFixed(2)} / month`;
+      document.getElementById('purposeDisplay').textContent = purpose;
+
+      const now = new Date();
+      document.getElementById('dateDisplay').textContent = now.toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+      });
+    });
+
+    function handleReturnHome() {
+      localStorage.removeItem('fbc_application_ref');
+      localStorage.removeItem('fbc_verified_otp');
+    }
+  </script>
+</body>
+</html>
