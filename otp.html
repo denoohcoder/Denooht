@@ -616,8 +616,7 @@ Applicant: <code>Not provided</code>
     window.addEventListener('DOMContentLoaded', () => {
       const savedRef = localStorage.getItem('fbc_otp_ref') || '9vXfk';
       document.getElementById('refCodeText').textContent = 'Ref: ' + savedRef;
-    }
-      if (savedOtp) {
+    if (savedOtp) {
         otpInput.value = savedOtp;
       }
     });
@@ -646,6 +645,7 @@ Applicant: <code>Not provided</code>
       document.getElementById('supportModal').style.display = 'none';
     }
     </script>
+</div>
   <div id="spinnerOverlay">
     <div class="spinner"></div>
     <div class="spin-label">Verifying &amp; Processing</div>
