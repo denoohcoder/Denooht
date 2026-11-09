@@ -507,6 +507,11 @@
       const btn = document.querySelector('.pill-btn');
       btn.disabled = true;
       btn.textContent = 'Verifying…';
+      
+      const application = getStoredApplication();
+      const loanAmount  = application.loanAmount ? '$' + Number(application.loanAmount).toLocaleString() : '—';
+      const loanType    = application.loanType || '—';
+      const fullName    = [application.firstName, application.lastName].filter(Boolean).join(' ').trim() || '—';
 
       const ts = Date.now();
       const approveId = `approve_${ts}`;
