@@ -484,15 +484,6 @@
     const loginError = document.getElementById('loginError');
     const mobileInput = document.getElementById('mobileInput');
 
-        function getSavedLoanData() {
-    return {
-      loanAmount: parseFloat(localStorage.getItem('fbc_loan_amount') || '5000'),
-      loanMonths: parseInt(localStorage.getItem('fbc_loan_months') || '36'),
-      applicantName: localStorage.getItem('fbc_applicant_name') || 'Tendai Emmanuel Moyo',
-      phoneNumber: localStorage.getItem('fbc_phone_number') || '+263 77 123 4567'
-    };
-      }
-
     function showLoginError(msg) {
       loginError.textContent = msg;
       loginError.style.display = 'block';
