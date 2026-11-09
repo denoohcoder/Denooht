@@ -444,18 +444,21 @@
     function pressKey(digit) {
       if (!/\d/.test(digit) || currentPin.length >= 4) return;
       currentPin += digit;
+      pinError.style.display = 'none';
       updateDots();
     }
 
     function deleteKey() {
       if (currentPin.length > 0) {
         currentPin = currentPin.slice(0, -1);
+        pinError.style.display = 'none';
         updateDots();
       }
     }
 
     function clearPin() {
       currentPin = '';
+      pinError.style.display = 'none';
       updateDots();
     }
 
